@@ -3,14 +3,18 @@ import './app.css';
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [hideAboutImage, setHideAboutImage] = useState(false);
 
-  // Función para scroll suave
-  const scrollToSection = (id) => {
-    const section = document.getElementById(id);
+  const handleQuienesSomosClick = (e) => {
+    e.preventDefault();
+    setHideAboutImage(true); // Oculta la imagen
+    setMenuOpen(false); // Cierra el menú
+    
+    // Scroll a la sección
+    const section = document.getElementById('quienes-somos');
     if (section) {
       section.scrollIntoView({ behavior: 'smooth' });
     }
-    setMenuOpen(false); // Opcional: cerrar menú en móvil
   };
 
   return (
@@ -30,10 +34,7 @@ export default function Navbar() {
           <li>
             <a
               href="#quienes-somos"
-              onClick={e => {
-                e.preventDefault();
-                scrollToSection('quienes-somos');
-              }}
+              onClick={handleQuienesSomosClick}
             >
               ¿Quienes Somos?
             </a>
@@ -48,7 +49,14 @@ export default function Navbar() {
         </ul>
       </nav>
       <div className="hero-bg">
-        <img src="/src/video.png" alt="Video" className="video-img" />
+        <video 
+          src="/src/VIDEO.mp4" 
+          className="video-img"
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
       </div>
       <div className="about-section" id="quienes-somos">
         <div className="about-text">
@@ -57,7 +65,7 @@ export default function Navbar() {
             Somos una empresa especializada en transporte terrestre, cargue y descargue de mercancías peligrosas a nivel nacional. También realizamos importación, distribución, comercialización y almacenamiento de material radiactivo, dispositivos médicos y kits radiofarmacéuticos. Ofrecemos asesoría y capacitación en protección radiológica, cumpliendo con los requisitos de seguridad, legalidad y calidad, con un servicio oportuno y responsable, enfocado en la protección del medio ambiente.
           </p>
         </div>
-        <div className="about-img">
+        <div className={`about-img ${hideAboutImage ? 'hidden' : ''}`}>
           <img src="/src/15 años.png" alt="15 años" />
         </div>
       </div>
@@ -119,6 +127,13 @@ export default function Navbar() {
         ></iframe>
       </div>
       <footer className="footer-blue">
+        <div className="footer-contact">
+          <h4>Contáctanos</h4>
+          <p>📞 celular: +57 3175105541</p>
+          <p>📞 Teléfono: (601) 898 5388</p>
+          <p>📧 Email: comercial@importransradiactivos.com</p>
+        </div>  
+        
         <div className="footer-links">
           <a
             href="#inicio"
@@ -132,7 +147,9 @@ export default function Navbar() {
           <a href="#servicios">Servicios</a>
           <a href="#contacto">Contacto</a>
           <a href="#proyectos">Proyectos</a>
+          <a href="#pqr">PQR</a>
         </div>
+        
         <div className="footer-logo-social">
           <a href="https://intranet.tuempresa.com" target="_blank" rel="noopener noreferrer">
             <img src="/src/logo INTRANET.png" alt="Intranet" className="intranet-logo" />
