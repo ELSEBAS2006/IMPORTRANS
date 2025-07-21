@@ -7,14 +7,19 @@ export default function Navbar() {
 
   const handleQuienesSomosClick = (e) => {
     e.preventDefault();
-    setHideAboutImage(true); // Oculta la imagen
-    setMenuOpen(false); // Cierra el menú
+    setHideAboutImage(true);
+    setMenuOpen(false);
     
-    // Scroll a la sección
     const section = document.getElementById('quienes-somos');
     if (section) {
       section.scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  const handleProductosClick = (e) => {
+    e.preventDefault();
+    setMenuOpen(false); // Cierra el menú
+    window.location.href = '/productos'; // Redirige a productos
   };
 
   return (
@@ -39,7 +44,14 @@ export default function Navbar() {
               ¿Quienes Somos?
             </a>
           </li>
-          <li><a href="#acerca">Productos</a></li>
+          <li>
+            <a
+              href="/productos"
+              onClick={handleProductosClick}
+            >
+              Productos
+            </a>
+          </li>
           <li><a href="#servicios">Servicios</a></li>
           <li><a href="#contacto">Proyectos</a></li>
           <li><a href="#contacto">Contactanos</a></li>
@@ -48,6 +60,7 @@ export default function Navbar() {
           </li>
         </ul>
       </nav>
+      
       <div className="hero-bg">
         <video 
           src="/src/VIDEO.mp4" 
@@ -58,6 +71,7 @@ export default function Navbar() {
           playsInline
         />
       </div>
+      
       <div className="about-section" id="quienes-somos">
         <div className="about-text">
           <h2>¿Quiénes Somos?</h2>
@@ -69,27 +83,29 @@ export default function Navbar() {
           <img src="/src/15 años.png" alt="15 años" />
         </div>
       </div>
+      
       <div className="certificados-title">
         <img src="/src/certificados.png" alt="Certificados" className="certificados-img" />
       </div>
+      
       <div className="blue-bg">
         <div className="cards-container">
           <div className="card">
             <img src="/src/card1.png" alt="Carta 1" className="card-img" />
             <div className="card-info">
               <h3>CERTIFICACION 1</h3>
-              <p>ISO 9001:2015 es la versión vigente del estándar internacional para Sistemas de Gestión de la Calidad (SGC). Su objetivo principal es ayudar a las organizaciones –de cualquier tamaño o sector– a garantizar de forma consistente productos y servicios que cumplan requisitos del cliente y normativos, al tiempo que promueven la mejora continua</p>
+              <p>ISO 9001:2015 es la versión vigente del estándar internacional para Sistemas de Gestión de la Calidad (SGC). Su objetivo principal es ayudar a las organizaciones –de cualquier tamaño o sector– a garantizar de forma consistente productos y servicios que cumplan requisitos del cliente y normativos, al tiempo que promueven la mejora continua</p>
             </div>
           </div>
           <div className="card">
             <img src="/src/card2.png" alt="Carta 2" className="card-img" />
             <div className="card-info">
               <h3>CERTIFICACION 2</h3>
-              <p>ISO 14001:2015 es un estándar internacional voluntario que establece los requisitos para un Sistema de Gestión Ambiental (SGA), ayudando a las organizaciones de cualquier tamaño a identificar, controlar y mejorar continuamente su desempeño ambiental mediante el ciclo PDCA, un enfoque basado en riesgos y con integración estratégica de liderazgo y ciclo de vida</p>
+              <p>ISO 14001:2015 es un estándar internacional voluntario que establece los requisitos para un Sistema de Gestión Ambiental (SGA), ayudando a las organizaciones de cualquier tamaño a identificar, controlar y mejorar continuamente su desempeño ambiental mediante el ciclo PDCA, un enfoque basado en riesgos y con integración estratégica de liderazgo y ciclo de vida</p>
             </div>
           </div>
           <div className="card">
-            <img src="/src/card 3.jpeg" alt="Carta 3" className="card-img" />
+            <img src="/src/card 3.png" alt="Carta 3" className="card-img" />
             <div className="card-info">
               <h3>CERTIFICACION 3</h3>
               <p>ISO 45001:2018 es la norma internacional para Sistemas de Gestión de Salud y Seguridad en el Trabajo (SST), publicada el 12 de marzo de 2018, reemplazando a OHSAS 18001</p>
@@ -99,21 +115,24 @@ export default function Navbar() {
             <img src="/src/card 4.png" alt="Carta 4" className="card-img" />
             <div className="card-info">
               <h3>CERTIFICACION 4</h3>
-              <p>ISO 39001:2012 define un sistema sistemático (liderazgo, planificación, operación, evaluación y mejora continua) para que organizaciones reduzcan eficazmente los accidentes graves en sus actividades viales.</p>
+              <p>ISO 39001:2012 define un sistema sistemático (liderazgo, planificación, operación, evaluación y mejora continua) para que organizaciones reduzcan eficazmente los accidentes graves en sus actividades viales.</p>
             </div>
           </div>
         </div>
         <div className="cards-label-row">
-          <span>ISO 9001 VERSIÓN 2015</span>
-          <span>ISO 14001 VERSIÓN 2015</span>
-          <span>ISO 45001 VERSIÓN 2018</span>
-          <span>ISO 39001 VERSIÓN 2012</span>
+          <span>ISO 9001 VERSIÓN 2015</span>
+          <span>ISO 14001 VERSIÓN 2015</span>
+          <span>ISO 45001 VERSIÓN 2018</span>
+          <span>ISO 39001 VERSIÓN 2012</span>
         </div>
       </div>
-      <div style={{ height: "2.5rem" }} /> {/* Espacio extra opcional */}
+      
+      <div style={{ height: "2.5rem" }} />
+      
       <div className="ubicanos-title">
         <img src="/src/ubicanos.png" alt="Ubícanos" className="ubicanos-img" />
       </div>
+      
       <div className="mapa-container">
         <iframe
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3976.081826698265!2d-74.13919222636007!3d4.755801241180198!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e3f838e2fad5bdd%3A0x204b6f273d7bd74e!2sImportrans%20Radiactivos!5e0!3m2!1ses!2sco!4v1752688204825!5m2!1ses!2sco"
@@ -126,6 +145,7 @@ export default function Navbar() {
           title="Ubicación Importrans"
         ></iframe>
       </div>
+      
       <footer className="footer-blue">
         <div className="footer-contact">
           <h4>Contáctanos</h4>

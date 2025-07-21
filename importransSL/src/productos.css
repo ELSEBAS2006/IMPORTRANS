@@ -1,0 +1,732 @@
+/* Estilos para la página de productos */
+.products-hero {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: white;
+  margin-bottom: 3rem;
+}
+
+.products-hero h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.products-hero p {
+  font-size: 1.3rem;
+  opacity: 0.9;
+}
+
+.products-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.products-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.product-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.product-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+}
+
+.product-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.product-info {
+  padding: 1.5rem;
+}
+
+.product-info h3 {
+  font-size: 1.4rem;
+  color: #03045e;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.product-info p {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.product-price {
+  font-size: 1.3rem;
+  color: #03045e;
+  font-weight: 700;
+}
+
+/* Prevenir scroll horizontal */
+body {
+  overflow-x: hidden;
+}
+
+/* Contenedor principal para imagen, texto y cango */
+.productos-main-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  gap: 3rem;
+  background-color: white;
+  overflow: visible;
+}
+
+/* Sección izquierda con imagen y texto */
+.productos-left-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  gap: 2rem;
+}
+
+/* Estilos para la imagen de productos */
+.productos-image-container {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.productos-img {
+  width: 250px;
+  max-width: 300px;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* Estilos para el texto */
+.productos-text-container {
+  width: 100%;
+  max-width: 600px;
+  padding: 0;
+  margin-top: 1.5rem;
+}
+
+.productos-text-container p {
+  font-size: 1.3rem;
+  line-height: 1.6;
+  color: #000000;
+  margin: 0;
+  text-align: left;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+/* Contenedor para imagen cango */
+.cango-image-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  flex: 0.6;
+  position: relative;
+  overflow: visible;
+  margin-right: 0;
+  margin-top: 10px;
+}
+
+.cango-image-container::before {
+  content: '';
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 300px;
+  height: 420px;
+  background-image: url('/src/fondo cango.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  z-index: 1;
+}
+
+.cango-img { 
+  width: 380px;
+  max-width: 380px;
+  height: auto;
+  border-radius: 8px;
+  position: relative;
+  z-index: 2;
+  margin-right: 0;
+}
+
+/* Contenedor para imagen de radioISOTOPOS */
+.radioisotopos-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 2rem;
+  width: 100%;
+  background-color: white;
+}
+
+.radioisotopos-img {
+  width: 400px;
+  max-width: 90%;
+  height: auto;
+  border-radius: 12px;
+}
+
+/* Contenedor para imagen de radiofármacos */
+.radiofarmacos-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 2rem;
+  width: 100%;
+  background-color: white;
+}
+
+.radiofarmacos-img {
+  width: 400px;
+  max-width: 90%;
+  height: auto;
+    border-radius: 12px;
+
+}
+
+/* Sección de cartas de productos */
+.productos-cards-section {
+  padding: 4rem 2rem;
+  background-color: white;
+  width: 100%;
+}
+
+.productos-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.producto-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.producto-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+.producto-card-header {
+  background: #03045e;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.producto-card-header h3 {
+  color: #FFFF09;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+}
+
+.producto-card-body {
+  background: white;
+  padding: 1.5rem;
+}
+
+.producto-card-body p {
+  color: #000000;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+  text-align: center;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+/* Sección de servicios radiofármacos con fondo azul */
+.radiofarmacos-services-section {
+  background: #091242;
+  padding: 4rem 2rem;
+  width: 100%;
+}
+
+.radiofarmacos-services-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.radiofarmaco-card {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+}
+
+.radiofarmaco-card:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
+}
+
+.radiofarmaco-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #FFFF09 0%, #FFD700 100%);
+}
+
+.radiofarmaco-icon {
+  position: absolute;
+  top: -12px;
+  right: 15px;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #FFFF09 0%, #FFD700 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(255, 255, 9, 0.4);
+  border: 2px solid white;
+}
+
+.radiofarmaco-logo {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.2));
+}
+
+.radiofarmaco-content {
+  margin-top: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.radiofarmaco-content h3 {
+  color: #091242;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+  font-family: 'Arial', sans-serif;
+  text-align: center;
+}
+
+.radiofarmaco-content p {
+  color: #000000;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin: 0;
+  font-family: 'Times New Roman', Times, serif;
+  text-align: center;
+  flex: 1;
+}
+
+/* Contenedor para imagen de footer */
+.footer-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 2rem;
+  width: 100%;
+  background-color: white;
+}
+
+.footer-img {
+  width: 100%;
+  max-width: 1200px;
+  height: auto;
+  border-radius: 12px;
+}
+
+/* Responsive para productos */
+@media (max-width: 768px) {
+  .products-hero {
+    padding: 2rem 1rem;
+  }
+
+  .products-hero h1 {
+    font-size: 2rem;
+  }
+
+  .products-hero p {
+    font-size: 1.1rem;
+  }
+
+  .products-container {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .product-card:hover {
+    transform: none;
+  }
+
+  .productos-main-container {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  .productos-left-section {
+    align-items: center;
+  }
+
+  .productos-image-container {
+    justify-content: center;
+  }
+  
+  .productos-img {
+    width: 250px;
+    max-width: 250px;
+  }
+  
+  .productos-text-container {
+    margin-top: 1rem;
+  }
+  
+  .productos-text-container p {
+    font-size: 1.1rem;
+    text-align: center;
+  }
+
+  .cango-image-container {
+    align-items: center;
+    justify-content: center;
+    margin-right: 0;
+    margin-top: 0.5rem;
+    overflow: visible;
+  }
+
+  .cango-image-container::before {
+    display: none;
+  }
+
+  .cango-img {
+    width: 250px;
+    max-width: 250px;
+  }
+
+  .radioisotopos-container {
+    padding: 2rem 1rem;
+  }
+
+  .radioisotopos-img {
+    width: 100%;
+    max-width: 350px;
+  }
+
+  .radiofarmacos-container {
+    padding: 2rem 1rem;
+  }
+
+  .radiofarmacos-img {
+    width: 100%;
+    max-width: 350px;
+  }
+
+  .productos-cards-section {
+    padding: 2rem 1rem;
+  }
+
+  .productos-cards-container {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .producto-card-header h3 {
+    font-size: 1.1rem;
+    color: #FFFF09;
+  }
+
+  .producto-card-body p {
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  .radiofarmacos-services-section {
+    padding: 3rem 1rem;
+  }
+
+  .radiofarmacos-services-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    max-width: 350px;
+  }
+
+  .radiofarmaco-card {
+    padding: 1.5rem;
+    height: auto;
+    min-height: 200px;
+  }
+
+  .radiofarmaco-icon {
+    width: 45px;
+    height: 45px;
+    top: -15px;
+    right: 15px;
+  }
+
+  .radiofarmaco-logo {
+    width: 24px;
+    height: 24px;
+  }
+
+  .radiofarmaco-content {
+    margin-top: 1.2rem;
+  }
+
+  .radiofarmaco-content h3 {
+    font-size: 1rem;
+  }
+
+  .radiofarmaco-content p {
+    font-size: 0.8rem;
+  }
+
+  .footer-image-container {
+    padding: 2rem 1rem;
+  }
+
+  .footer-img {
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1024px) and (min-height: 1366px) and (max-height: 1366px) {
+  .products-hero {
+    padding: 3rem 2rem;
+  }
+
+  .products-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+  
+  .productos-img {
+    width: 350px;
+    max-width: 350px;
+  }
+
+  .cango-image-container {
+    margin-right: 0;
+    margin-top: 2rem;
+    overflow: visible;
+  }
+
+  .cango-image-container::before {
+    top: -50px;
+    right: -120px;
+    width: 650px;
+    height: 540px;
+  }
+
+  .cango-img {
+    width: 450px;
+    max-width: 450px;
+  }
+
+  .radioisotopos-container {
+    padding: 4rem 2rem;
+  }
+
+  .radioisotopos-img {
+    width: 700px;
+    max-width: 70%;
+  }
+
+  .radiofarmacos-container {
+    padding: 4rem 2rem;
+  }
+
+  .radiofarmacos-img {
+    width: 650px;
+    max-width: 65%;
+  }
+
+  .radiofarmacos-services-section {
+    padding: 5rem 2rem;
+  }
+
+  .radiofarmacos-services-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3rem;
+    max-width: 900px;
+  }
+
+  .radiofarmaco-card {
+    padding: 2.5rem;
+    height: 320px;
+  }
+
+  .radiofarmaco-content h3 {
+    color: #000000 !important;
+    font-size: 1.6rem !important;
+    font-weight: 700;
+    margin-bottom: 1.2rem;
+    text-align: center;
+  }
+
+  .radiofarmaco-content p {
+    color: #000000 !important;
+    font-size: 1.2rem !important;
+    line-height: 1.7;
+    font-weight: 500;
+    text-align: center;
+  }
+
+  .productos-cards-section {
+    padding: 5rem 2rem;
+  }
+
+  .produtos-cards-container {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+
+  .producto-card-header h3 {
+    font-size: 1.4rem;
+    color: #FFFF09;
+  }
+
+  .producto-card-body p {
+    font-size: 1.1rem;
+    text-align: center;
+  }
+
+  .produtos-text-container {
+    margin-top: 2rem;
+  }
+
+  .productos-text-container p {
+    font-size: 1.4rem;
+  }
+
+  .footer-image-container {
+    padding: 4rem 2rem;
+  }
+
+  .footer-img {
+    max-width: 1300px;
+  }
+}
+
+/* Responsive para servicios radiofármacos */
+@media (max-width: 768px) {
+  .radiofarmacos-services-section {
+    padding: 3rem 1rem;
+  }
+
+  .radiofarmacos-services-container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    max-width: 350px;
+  }
+
+  .radiofarmaco-card {
+    padding: 1.5rem;
+    height: auto;
+    min-height: 200px;
+  }
+
+  .radiofarmaco-icon {
+    width: 45px;
+    height: 45px;
+    top: -15px;
+    right: 15px;
+  }
+
+  .radiofarmaco-logo {
+    width: 24px;
+    height: 24px;
+  }
+
+  .radiofarmaco-content {
+    margin-top: 1.2rem;
+  }
+
+  .radiofarmaco-content h3 {
+    font-size: 1rem;
+  }
+
+  .radiofarmaco-content p {
+    font-size: 0.8rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .radiofarmacos-services-section {
+    padding: 3.5rem 1.5rem;
+  }
+
+  .radiofarmacos-services-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+    max-width: 800px;
+  }
+
+  .radiofarmaco-card {
+    padding: 1.5rem;
+    height: 240px;
+  }
+
+  .radiofarmaco-content h3 {
+    font-size: 1rem;
+  }
+
+  .radiofarmaco-content p {
+    font-size: 0.8rem;
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1200px) {
+  .radiofarmacos-services-container {
+    max-width: 1100px;
+    gap: 2rem;
+  }
+
+  .radiofarmaco-card {
+    padding: 1.3rem;
+    height: 210px;
+  }
+
+  .radiofarmaco-content h3 {
+    font-size: 1rem;
+  }
+
+  .radiofarmaco-content p {
+    font-size: 0.8rem;
+  }
+}
