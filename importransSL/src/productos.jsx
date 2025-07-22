@@ -53,9 +53,48 @@ const Productos = () => {
               Productos
             </a>
           </li>
-          <li><a href="#servicios">Servicios</a></li>
-          <li><a href="#contacto">Proyectos</a></li>
-          <li><a href="#contacto">Contactanos</a></li>
+          <li>
+            <a 
+              href="/servicios" 
+              onClick={(e) => {
+                e.preventDefault();
+                navigate('/servicios');
+              }}
+            >
+              Servicios
+            </a>
+          </li>
+          <li>
+            <a 
+              href="/proyectos"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate('/proyectos');
+              }}
+            >
+              Proyectos
+            </a>
+          </li>
+          <li>
+            <a 
+              href="/servicios#contacto"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate('/servicios');
+                setTimeout(() => {
+                  const elemento = document.getElementById('contacto');
+                  if (elemento) {
+                    elemento.scrollIntoView({ 
+                      behavior: 'smooth',
+                      block: 'start'
+                    });
+                  }
+                }, 100);
+              }}
+            >
+              Contactanos
+            </a>
+          </li>
           <li>
             <button className="login-btn">log-in</button>
           </li>
@@ -255,9 +294,42 @@ const Productos = () => {
           >
             Inicio
           </a>
-          <a href="#servicios">Servicios</a>
-          <a href="#contacto">Contacto</a>
-          <a href="#proyectos">Proyectos</a>
+          <a 
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate('/servicios');
+            }}
+          >
+            Servicios
+          </a>
+          <a 
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate('/contacto');
+            }}
+          >
+            Contacto
+          </a>
+          <a 
+            href="/servicios#contacto"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate('/servicios');
+              setTimeout(() => {
+                const elemento = document.getElementById('contacto');
+                if (elemento) {
+                  elemento.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                  });
+                }
+              }, 100);
+            }}
+          >
+            Contacto
+          </a>
           <a href="#pqr">PQR</a>
         </div>
         

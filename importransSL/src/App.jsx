@@ -1,14 +1,21 @@
-import { useState } from 'react';
-import './app.css';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './App.css';
 
-export default function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [hideAboutImage, setHideAboutImage] = useState(false);
+function App() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAboutImageHidden, setIsAboutImageHidden] = useState(false);
+  const aboutTextRef = useRef(null);
+  const navigate = useNavigate();
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   const handleQuienesSomosClick = (e) => {
     e.preventDefault();
-    setHideAboutImage(true);
-    setMenuOpen(false);
+    setIsAboutImageHidden(true);
+    setIsMenuOpen(false);
     
     const section = document.getElementById('quienes-somos');
     if (section) {
@@ -18,49 +25,65 @@ export default function Navbar() {
 
   const handleProductosClick = (e) => {
     e.preventDefault();
-    setMenuOpen(false); // Cierra el menú
-    window.location.href = '/productos'; // Redirige a productos
+    setIsMenuOpen(false);
+    window.location.href = '/productos';             
+  };
+
+  const handleInicioClick = (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleNavigation = (route) => {
+    navigate(route);
   };
 
   return (
-    <>
+    <div className="App">
+      {/* Navbar */}
       <nav className="navbar">
         <div className="logo">
-          <a href="#inicio">
+          <a href="/" onClick={(e) => { e.preventDefault(); navigate('/'); }}>
             <img src='/src/LOGO.png' alt="Logo" className="logo-img" />
           </a>
         </div>
 
-        <button className="nav-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+        <button className="nav-toggle" onClick={toggleMenu}>
           ☰
         </button>
 
-        <ul className={`nav-links ${menuOpen ? 'show' : ''}`}>
+        <ul className={`nav-links ${isMenuOpen ? 'show' : ''}`}>
           <li>
-            <a
-              href="#quienes-somos"
-              onClick={handleQuienesSomosClick}
-            >
-              ¿Quienes Somos?
+            <a href="/" onClick={(e) => { e.preventDefault(); navigate('/'); }}>
+              Inicio
             </a>
           </li>
           <li>
-            <a
-              href="/productos"
-              onClick={handleProductosClick}
-            >
+            <a href="/productos" onClick={(e) => { e.preventDefault(); navigate('/productos'); }}>
               Productos
             </a>
           </li>
-          <li><a href="#servicios">Servicios</a></li>
-          <li><a href="#contacto">Proyectos</a></li>
-          <li><a href="#contacto">Contactanos</a></li>
+          <li>
+            <a href="/servicios" onClick={(e) => { e.preventDefault(); navigate('/servicios'); }}>
+              Servicios
+            </a>
+          </li>
+          <li>
+            <a href="/proyectos" onClick={(e) => { e.preventDefault(); navigate('/proyectos'); }}>
+              Proyectos
+            </a>
+          </li>
+          <li>
+            <a href="/contacto" onClick={(e) => { e.preventDefault(); navigate('/contacto'); }}>
+              Contactanos
+            </a>
+          </li>
           <li>
             <button className="login-btn">log-in</button>
           </li>
         </ul>
       </nav>
-      
+
       <div className="hero-bg">
         <video 
           src="/src/VIDEO.mp4" 
@@ -79,7 +102,7 @@ export default function Navbar() {
             Somos una empresa especializada en transporte terrestre, cargue y descargue de mercancías peligrosas a nivel nacional. También realizamos importación, distribución, comercialización y almacenamiento de material radiactivo, dispositivos médicos y kits radiofarmacéuticos. Ofrecemos asesoría y capacitación en protección radiológica, cumpliendo con los requisitos de seguridad, legalidad y calidad, con un servicio oportuno y responsable, enfocado en la protección del medio ambiente.
           </p>
         </div>
-        <div className={`about-img ${hideAboutImage ? 'hidden' : ''}`}>
+        <div className={`about-img ${isAboutImageHidden ? 'hidden' : ''}`}>
           <img src="/src/15 años.png" alt="15 años" />
         </div>
       </div>
@@ -146,6 +169,7 @@ export default function Navbar() {
         ></iframe>
       </div>
       
+      {/* Footer */}
       <footer className="footer-blue">
         <div className="footer-contact">
           <h4>Contáctanos</h4>
@@ -155,18 +179,33 @@ export default function Navbar() {
         </div>  
         
         <div className="footer-links">
-          <a
-            href="#inicio"
-            onClick={e => {
-              e.preventDefault();
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-          >
+          <a href="#" onClick={handleInicioClick}>
             Inicio
           </a>
-          <a href="#servicios">Servicios</a>
-          <a href="#contacto">Contacto</a>
-          <a href="#proyectos">Proyectos</a>
+          <a href="#" onClick={(e) => { e.preventDefault(); navigate('/servicios'); }}>
+            Servicios
+          </a>
+          <a 
+            href="/servicios#contacto"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate('/servicios');
+              setTimeout(() => {
+                const elemento = document.getElementById('contacto');
+                if (elemento) {
+                  elemento.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                  });
+                }
+              }, 100);
+            }}
+          >
+            Contacto
+          </a>
+          <a href="#" onClick={(e) => { e.preventDefault(); navigate('/proyectos'); }}>
+            Proyectos
+          </a>
           <a href="#pqr">PQR</a>
         </div>
         
@@ -189,8 +228,10 @@ export default function Navbar() {
           </div>
         </div>
       </footer>
-    </>
+    </div>
   );
 }
+
+export default App;
 
 
