@@ -1,10 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './App.css';
+import ContactModal from './contacto';
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAboutImageHidden, setIsAboutImageHidden] = useState(false);
+  const [showPQRModal, setShowPQRModal] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [pqrData, setPqrData] = useState({
+    opcion: '',
+    nombres: '',
+    tipoDocumento: '',
+    numeroDocumento: '',
+    correo: '',
+    telefono: '',
+    objeto: ''
+  });
   const aboutTextRef = useRef(null);
   const navigate = useNavigate();
 
@@ -26,11 +38,12 @@ function App() {
   const handleProductosClick = (e) => {
     e.preventDefault();
     setIsMenuOpen(false);
-    window.location.href = '/productos';             
+    navigate('/productos');             
   };
 
   const handleInicioClick = (e) => {
     e.preventDefault();
+    setIsMenuOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -38,12 +51,130 @@ function App() {
     navigate(route);
   };
 
+  const handlePQRSubmit = (e) => {
+    e.preventDefault();
+    console.log('Datos PQR:', pqrData);
+    setShowPQRModal(false);
+    alert('Su PQR ha sido enviado exitosamente');
+  };
+
+  const handleInputChange = (e) => {
+    setPqrData({
+      ...pqrData,
+      [e.target.name]: e.target.value
+    });
+  };
+
   return (
     <div className="App">
+      {/* Modal PQR */}
+      {showPQRModal && (
+        <div className="pqr-modal-overlay" onClick={() => setShowPQRModal(false)}>
+          <div className="pqr-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="pqr-modal-header">
+              <h3>Formulario PQR</h3>
+              <button className="close-btn" onClick={() => setShowPQRModal(false)}>×</button>
+            </div>
+            <form onSubmit={handlePQRSubmit} className="pqr-form">
+              <div className="pqr-form-row">
+                <select
+                  name="opcion"
+                  value={pqrData.opcion}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">Seleccione una opción</option>
+                  <option value="queja">Queja</option>
+                  <option value="reclamo">Reclamo</option>
+                  <option value="solicitud">Solicitud</option>
+                  <option value="denuncia">Denuncia</option>
+                  <option value="propuesta">Propuesta</option>
+                </select>
+              </div>
+              
+              <div className="pqr-form-row">
+                <input
+                  type="text"
+                  name="nombres"
+                  placeholder="Nombres/Entidad"
+                  value={pqrData.nombres}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              
+              <div className="pqr-form-row">
+                <select
+                  name="tipoDocumento"
+                  value={pqrData.tipoDocumento}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">Tipo de documento</option>
+                  <option value="cc">Cédula de Ciudadanía</option>
+                  <option value="ce">Cédula de Extranjería</option>
+                  <option value="nit">NIT</option>
+                  <option value="passport">Pasaporte</option>
+                </select>
+                <input
+                  type="text"
+                  name="numeroDocumento"
+                  placeholder="Número de documento"
+                  value={pqrData.numeroDocumento}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              
+              <div className="pqr-form-row">
+                <input
+                  type="email"
+                  name="correo"
+                  placeholder="Correo electrónico"
+                  value={pqrData.correo}
+                  onChange={handleInputChange}
+                  required
+                />
+                <input
+                  type="tel"
+                  name="telefono"
+                  placeholder="Teléfono"
+                  value={pqrData.telefono}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              
+              <div className="pqr-form-row">
+                <textarea
+                  name="objeto"
+                  placeholder="Objeto de su PQRSD"
+                  value={pqrData.objeto}
+                  onChange={handleInputChange}
+                  rows="4"
+                  required
+                />
+              </div>
+              
+              <div className="pqr-form-buttons">
+                <button type="button" onClick={() => setShowPQRModal(false)}>Cancelar</button>
+                <button type="submit">Enviar PQR</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Contacto */}
+      <ContactModal 
+        showContactModal={showContactModal} 
+        setShowContactModal={setShowContactModal} 
+      />
+
       {/* Navbar */}
       <nav className="navbar">
         <div className="logo">
-          <a href="/" onClick={(e) => { e.preventDefault(); navigate('/'); }}>
+          <a href="/" onClick={handleInicioClick}>
             <img src='/src/LOGO.png' alt="Logo" className="logo-img" />
           </a>
         </div>
@@ -54,7 +185,7 @@ function App() {
 
         <ul className={`nav-links ${isMenuOpen ? 'show' : ''}`}>
           <li>
-            <a href="/" onClick={(e) => { e.preventDefault(); navigate('/'); }}>
+            <a href="/" onClick={handleInicioClick}>
               Inicio
             </a>
           </li>
@@ -74,7 +205,14 @@ function App() {
             </a>
           </li>
           <li>
-            <a href="/contacto" onClick={(e) => { e.preventDefault(); navigate('/contacto'); }}>
+            <a 
+              href="#contacto"
+              onClick={(e) => {
+                e.preventDefault();
+                setShowContactModal(true);
+                setIsMenuOpen(false);
+              }}
+            >
               Contactanos
             </a>
           </li>
@@ -186,19 +324,10 @@ function App() {
             Servicios
           </a>
           <a 
-            href="/servicios#contacto"
+            href="#contacto"
             onClick={(e) => {
               e.preventDefault();
-              navigate('/servicios');
-              setTimeout(() => {
-                const elemento = document.getElementById('contacto');
-                if (elemento) {
-                  elemento.scrollIntoView({ 
-                    behavior: 'smooth',
-                    block: 'start'
-                  });
-                }
-              }, 100);
+              setShowContactModal(true);
             }}
           >
             Contacto
@@ -206,7 +335,10 @@ function App() {
           <a href="#" onClick={(e) => { e.preventDefault(); navigate('/proyectos'); }}>
             Proyectos
           </a>
-          <a href="#pqr">PQR</a>
+          <a href="#pqr" onClick={(e) => {
+            e.preventDefault();
+            setShowPQRModal(true);
+          }}>PQR</a>
         </div>
         
         <div className="footer-logo-social">

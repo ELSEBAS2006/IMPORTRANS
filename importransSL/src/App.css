@@ -904,18 +904,16 @@
   }
 
   .nav-links::after {
-    content: ' IMPORTRANS ';
+    content: '';
     position: absolute;
     top: 3rem;
     left: 50%;
     transform: translateX(-50%);
-    color: #03045e;
-    font-size: 1.2rem;
-    font-weight: 300;
-    letter-spacing: 3px;
+    width: 120px;
+    height: 60px;
+    background: url('/src/LOGO.png') center/contain no-repeat;
     opacity: 0.6;
     z-index: 1;
-    text-transform: uppercase;
   }
 
   .nav-links li {
@@ -1002,7 +1000,6 @@
   }
 
   .nav-links a::after {
-    content: '→';
     position: absolute;
     right: 1.5rem;
     top: 50%;
@@ -1241,8 +1238,8 @@
     right: 0;
     background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
     backdrop-filter: blur(25px);
-    width: 100vw;
-    height: 100vh;
+    width: 30vw;
+    height: 60vh;
     box-shadow: 0 0 50px rgba(0,0,0,0.15);
     padding: 0;
     border-radius: 0;
@@ -1269,20 +1266,17 @@
   }
 
   .nav-links::after {
-    content: 'IMPORTRANS';
+    content: '';
     position: absolute;
     top: 3rem;
     left: 50%;
     transform: translateX(-50%);
-    color: #03045e;
-    font-size: 1.2rem;
-    font-weight: 300;
-    letter-spacing: 3px;
+    width: 120px;
+    height: 60px;
+    background: url('/src/LOGO.png') center/contain no-repeat;
     opacity: 0.6;
     z-index: 1;
-    text-transform: uppercase;
   }
-
   .nav-links li {
     justify-content: center;
     width: 100%;
@@ -1367,7 +1361,6 @@
   }
 
   .nav-links a::after {
-    content: '→';
     position: absolute;
     right: 1.5rem;
     top: 50%;
@@ -1594,5 +1587,106 @@
   
   .ubicanos-img {
     margin: 0 auto !important;
+  }
+}
+
+/* Efecto hover solo para enlaces del navbar - SIN tocar el logo */
+.nav-links a {
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #03045e;
+  transition: width 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #03045e;
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+/* Excluir el logo del efecto */
+.logo a::after {
+  display: none !important;
+}
+
+.logo a:hover {
+  color: inherit !important;
+}
+
+/* Animaciones suaves para transiciones entre páginas - SIN CAMBIAR NADA MÁS */
+.App {
+  animation: fadeInPage 0.6s ease-in-out;
+}
+
+@keyframes fadeInPage {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Transiciones suaves para React Router */
+.page-enter {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.page-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.page-exit-active {
+  opacity: 0;
+  transform: translateY(-30px);
+  transition: opacity 0.3s ease-in, transform 0.3s ease-in;
+}
+
+/* Animaciones escalonadas para el contenido */
+.hero-bg {
+  animation: slideInContent 0.7s ease-out 0.1s both;
+}
+
+.about-section {
+  animation: slideInContent 0.7s ease-out 0.2s both;
+}
+
+.blue-bg {
+  animation: slideInContent 0.7s ease-out 0.3s both;
+}
+
+.proyectos-content {
+  animation: slideInContent 0.7s ease-out 0.1s both;
+}
+
+@keyframes slideInContent {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

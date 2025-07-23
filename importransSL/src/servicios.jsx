@@ -2,17 +2,147 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './App.css';
 import './servicios.css';
+import ContactModal from './contacto';
 
 const Servicios = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showPQRModal, setShowPQRModal] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [pqrData, setPqrData] = useState({
+    opcion: '',
+    nombres: '',
+    tipoDocumento: '',
+    numeroDocumento: '',
+    correo: '',
+    telefono: '',
+    objeto: ''
+  });
   const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const handlePQRSubmit = (e) => {
+    e.preventDefault();
+    console.log('Datos PQR:', pqrData);
+    setShowPQRModal(false);
+    alert('Su PQR ha sido enviado exitosamente');
+  };
+
+  const handleInputChange = (e) => {
+    setPqrData({
+      ...pqrData,
+      [e.target.name]: e.target.value
+    });
+  };
+
   return (
     <div className="App">
+      {/* Modal PQR */}
+      {showPQRModal && (
+        <div className="pqr-modal-overlay" onClick={() => setShowPQRModal(false)}>
+          <div className="pqr-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="pqr-modal-header">
+              <h3>Formulario PQR</h3>
+              <button className="close-btn" onClick={() => setShowPQRModal(false)}>×</button>
+            </div>
+            <form onSubmit={handlePQRSubmit} className="pqr-form">
+              <div className="pqr-form-row">
+                <select
+                  name="opcion"
+                  value={pqrData.opcion}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">Seleccione una opción</option>
+                  <option value="queja">Queja</option>
+                  <option value="reclamo">Reclamo</option>
+                  <option value="solicitud">Solicitud</option>
+                  <option value="denuncia">Denuncia</option>
+                  <option value="propuesta">Propuesta</option>
+                </select>
+              </div>
+              
+              <div className="pqr-form-row">
+                <input
+                  type="text"
+                  name="nombres"
+                  placeholder="Nombres/Entidad"
+                  value={pqrData.nombres}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              
+              <div className="pqr-form-row">
+                <select
+                  name="tipoDocumento"
+                  value={pqrData.tipoDocumento}
+                  onChange={handleInputChange}
+                  required
+                >
+                  <option value="">Tipo de documento</option>
+                  <option value="cc">Cédula de Ciudadanía</option>
+                  <option value="ce">Cédula de Extranjería</option>
+                  <option value="nit">NIT</option>
+                  <option value="passport">Pasaporte</option>
+                </select>
+                <input
+                  type="text"
+                  name="numeroDocumento"
+                  placeholder="Número de documento"
+                  value={pqrData.numeroDocumento}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              
+              <div className="pqr-form-row">
+                <input
+                  type="email"
+                  name="correo"
+                  placeholder="Correo electrónico"
+                  value={pqrData.correo}
+                  onChange={handleInputChange}
+                  required
+                />
+                <input
+                  type="tel"
+                  name="telefono"
+                  placeholder="Teléfono"
+                  value={pqrData.telefono}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              
+              <div className="pqr-form-row">
+                <textarea
+                  name="objeto"
+                  placeholder="Objeto de su PQRSD"
+                  value={pqrData.objeto}
+                  onChange={handleInputChange}
+                  rows="4"
+                  required
+                />
+              </div>
+              
+              <div className="pqr-form-buttons">
+                <button type="button" onClick={() => setShowPQRModal(false)}>Cancelar</button>
+                <button type="submit">Enviar PQR</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Contacto */}
+      <ContactModal 
+        showContactModal={showContactModal} 
+        setShowContactModal={setShowContactModal} 
+      />
+
       {/* Navbar */}
       <nav className="navbar">
         <div className="logo">
@@ -75,13 +205,8 @@ const Servicios = () => {
               href="#contacto"
               onClick={(e) => {
                 e.preventDefault();
-                const elemento = document.getElementById('contacto');
-                if (elemento) {
-                  elemento.scrollIntoView({ 
-                    behavior: 'smooth',
-                    block: 'start'
-                  });
-                }
+                setShowContactModal(true);
+                setIsMenuOpen(false);
               }}
             >
               Contactanos
@@ -127,7 +252,7 @@ const Servicios = () => {
               <img src="/src/ALMA.jpg" alt="Asesoría" className="servicio-img" />
             </div>
             <div className="servicio-content">
-              <h3>Asesoría y Capacitación</h3>
+              <h3>Almacenamiento</h3>
             </div>
             <div className="servicio-hover-info">
               <h4>Información Detallada</h4>
@@ -137,97 +262,8 @@ const Servicios = () => {
         </div>
       </div>
 
-      {/* Sección con fondo azul en mitad izquierda */}
-      <div id="contacto" className="blue-half-section">
-        {/* Elementos decorativos */}
-        <div className="decorative-circles">
-          <div className="circle yellow-circle"></div>
-          <div className="circle black-circle"></div>
-        </div>
-        
-        <div className="blue-half-content">
-          <h2>CONTACTO</h2>
-          <div className="contact-icons">
-            <div className="contact-icon-item">
-              <div className="contact-icon">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
-                </svg>
-              </div>
-              <p>+57 3175105541</p>
-            </div>
-            
-            <div className="contact-icon-item">
-              <div className="contact-icon">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-                </svg>
-              </div>
-              <p>comercial@importransradiactivos.com</p>
-            </div>
-            
-            <div className="contact-icon-item">
-              <div className="contact-icon">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                </svg>
-              </div>
-              <p>Bogotá, Colombia</p>
-            </div>
-          </div>
-        </div>
-        
-        {/* Formulario de contacto */}
-        <div className="contact-form-section">
-          <div className="contact-form-row">
-            <div className="form-field">
-              <label>Nombre</label>
-              <input type="text" placeholder="Ingresa tu nombre" />
-            </div>
-            <div className="form-field">
-              <label>Empresa</label>
-              <input type="text" placeholder="Nombre de tu empresa" />
-            </div>
-          </div>
-          
-          <div className="contact-form-row">
-            <div className="form-field">
-              <label>Email</label>
-              <input type="email" placeholder="tu@email.com" />
-            </div>
-            <div className="form-field">
-              <label>Teléfono</label>
-              <input type="tel" placeholder="+57 300 000 0000" />
-            </div>
-          </div>
-          
-          <div className="contact-form-row">
-            <div className="form-field full-width">
-              <label>Descripción</label>
-              <input type="text" placeholder="Describe tu consulta..." />
-            </div>
-          </div>
-          
-          {/* Botón de enviar dentro del formulario para móvil */}
-          <div className="contact-form-button mobile-only">
-            <button type="submit" className="enviar-btn">Enviar</button>
-          </div>
-        </div>
-        
-        {/* Botón de enviar fuera del formulario para escritorio */}
-        <div className="contact-form-button desktop-only">
-          <button type="submit" className="enviar-btn">Enviar</button>
-        </div>
-      </div>
 
-      {/* Sección de política de datos */}
-      <div className="politica-datos-section">
-        <div className="politica-datos-content">
-          <p>
-            De conformidad con lo dispuesto en la ley 1581 de 2012, le informamos que los datos personales que usted nos ha entregado, como proveedor o prestador de bienes y servicios, harán parte de nuestra base de datos para ser usados con la siguiente finalidad: Recolectar, Transferir, Almacenar, Usar, Circular, Suprimir, Compartir, Actualizar y Transmitir, para efectos de cumplir con los objetivos establecidas por la ley de acuerdo con la naturaleza y actividad económica.
-          </p>
-        </div>
-      </div>
+
 
       {/* Footer */}
       <footer className="footer-blue">
@@ -258,25 +294,16 @@ const Servicios = () => {
             Servicios
           </a>
           <a 
-            href="/servicios#contacto"
+            href="#contacto"
             onClick={(e) => {
               e.preventDefault();
-              navigate('/servicios');
-              setTimeout(() => {
-                const elemento = document.getElementById('contacto');
-                if (elemento) {
-                  elemento.scrollIntoView({ 
-                    behavior: 'smooth',
-                    block: 'start'
-                  });
-                }
-              }, 100);
+              setShowContactModal(true);
             }}
           >
             Contacto
           </a>
           <a
-    
+            href="#"
             onClick={(e) => {
               e.preventDefault();
               navigate('/proyectos');
@@ -284,7 +311,10 @@ const Servicios = () => {
           >
             Proyectos
           </a>
-          <a href="#pqr">PQR</a>
+          <a href="#pqr" onClick={(e) => {
+            e.preventDefault();
+            setShowPQRModal(true);
+          }}>PQR</a>
         </div>
         
         <div className="footer-logo-social">
