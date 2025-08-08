@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './App.css';
+import './index.css';
 import ContactModal from './contacto';
 
 function App() {
@@ -217,7 +217,12 @@ function App() {
             </a>
           </li>
           <li>
-            <button className="login-btn">log-in</button>
+            <button 
+              className="login-btn"
+              onClick={() => navigate('/login')}
+            >
+              log-in
+            </button>
           </li>
         </ul>
       </nav>
@@ -365,5 +370,4 @@ function App() {
 }
 
 export default App;
-
 
