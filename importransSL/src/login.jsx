@@ -8,6 +8,7 @@ const Login = () => {
     password: ''
   });
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -76,14 +77,34 @@ const Login = () => {
           </div>
           
           <div className="form-group">
-            <input
-              type="password"
-              name="password"
-              placeholder="Contraseña"
-              value={loginData.password}
-              onChange={handleInputChange}
-              required
-            />
+            <div className="password-input-container">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                placeholder="Contraseña"
+                value={loginData.password}
+                onChange={handleInputChange}
+                required
+              />
+              <button
+                type="button"
+                className="toggle-password-btn"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="#000" strokeWidth="2" fill="none"/>
+                    <circle cx="12" cy="12" r="3" stroke="#000" strokeWidth="2" fill="none"/>
+                    <line x1="4" y1="4" x2="20" y2="20" stroke="#000" strokeWidth="2"/>
+                  </svg>
+                ) : (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="#000" strokeWidth="2" fill="none"/>
+                    <circle cx="12" cy="12" r="3" stroke="#000" strokeWidth="2" fill="none"/>
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
           
           <button type="submit" className="login-btn">

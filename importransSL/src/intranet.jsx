@@ -1,27 +1,639 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './intranet.css';
 
 const Intranet = () => {
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchSuggestions, setSearchSuggestions] = useState([]);
+  const [showEventModal, setShowEventModal] = useState(false);
+  const [showEventDetailsModal, setShowEventDetailsModal] = useState(false);
+  const [selectedDayEvents, setSelectedDayEvents] = useState([]);
+  
+  // Función para obtener eventos guardados del localStorage
+  const getStoredEvents = () => {
+    const stored = localStorage.getItem('calendarEvents');
+    if (stored) {
+      return JSON.parse(stored);
+    }
+    return [];
+  };
+
+  const [events, setEvents] = useState(getStoredEvents());
+  const [eventForm, setEventForm] = useState({
+    date: '',
+    description: ''
+  });
+  const [editingEvent, setEditingEvent] = useState(null);
+
+  // Función para guardar eventos en localStorage cada vez que events cambie
+  useEffect(() => {
+    localStorage.setItem('calendarEvents', JSON.stringify(events));
+  }, [events]);
+
+  // Términos de búsqueda disponibles
+  const searchOptions = [
+    { term: 'notificaciones', section: 'notifications' },
+    { term: 'plataformas', section: 'services' },
+    { term: 'calendario', section: 'calendar' },
+    { term: 'servicios', section: 'services' },
+    { term: 'requisicion', section: 'services' },
+    { term: 'control comercial', section: 'services' },
+    { term: 'mesa de servicios', section: 'services' },
+    { term: 'videos', section: 'services' }
+  ];
+
+  // Función para manejar cambios en el buscador
+  const handleSearchChange = (e) => {
+    const value = e.target.value.toLowerCase();
+    setSearchTerm(value);
+
+    if (value.length > 0) {
+      const filtered = searchOptions.filter(option =>
+        option.term.toLowerCase().includes(value)
+      );
+      setSearchSuggestions(filtered);
+    } else {
+      setSearchSuggestions([]);
+    }
+  };
+
+  // Función para realizar la búsqueda
+  const handleSearch = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+      setSearchTerm('');
+      setSearchSuggestions([]);
+    }
+  };
+
+  // Función para manejar Enter en el buscador
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchSuggestions.length > 0) {
+      handleSearch(searchSuggestions[0].section);
+    }
+  };
+
+  // Función para abrir modal de evento
+  const handleCalendarClick = () => {
+    setEditingEvent(null);
+    setEventForm({ date: '', description: '' });
+    setShowEventModal(true);
+  };
+
+  // Función para cerrar modal
+  const closeEventModal = () => {
+    setShowEventModal(false);
+    setEventForm({ date: '', description: '' });
+    setEditingEvent(null);
+  };
+
+  // Función para manejar cambios en el formulario de evento
+  const handleEventFormChange = (e) => {
+    setEventForm({
+      ...eventForm,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  // Función para guardar evento (crear o editar)
+  const handleSaveEvent = (e) => {
+    e.preventDefault();
+    if (eventForm.date && eventForm.description) {
+      if (editingEvent) {
+        // Editar evento existente
+        const updatedEvents = events.map(event => 
+          event.id === editingEvent.id 
+            ? { ...event, date: eventForm.date, description: eventForm.description }
+            : event
+        );
+        setEvents(updatedEvents);
+        
+        // Actualizar eventos del día seleccionado si el modal de detalles está abierto
+        if (showEventDetailsModal) {
+          const updatedEvent = { ...editingEvent, date: eventForm.date, description: eventForm.description };
+          setSelectedDayEvents(selectedDayEvents.map(event => 
+            event.id === editingEvent.id ? updatedEvent : event
+          ));
+        }
+        
+        alert('✅ Evento actualizado y guardado exitosamente');
+      } else {
+        // Crear nuevo evento
+        const newEvent = {
+          id: Date.now(),
+          date: eventForm.date,
+          description: eventForm.description
+        };
+        const updatedEvents = [...events, newEvent];
+        setEvents(updatedEvents);
+        
+        alert('✅ Evento creado y guardado exitosamente');
+      }
+      
+      closeEventModal();
+      
+      // Navegar al calendario
+      setTimeout(() => {
+        const calendarElement = document.getElementById('calendar');
+        if (calendarElement) {
+          calendarElement.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      }, 100);
+    }
+  };
+
+  // Función para obtener eventos de un día específico
+  const getEventsForDay = (year, month, day) => {
+    const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    return events.filter(event => event.date === dateString);
+  };
+
+  // Función para manejar clic en día del calendario
+  const handleDayClick = (year, month, day) => {
+    const dayEvents = getEventsForDay(year, month, day);
+    if (dayEvents.length > 0) {
+      setSelectedDayEvents(dayEvents);
+      setShowEventDetailsModal(true);
+    }
+  };
+
+  // Función para cerrar modal de detalles
+  const closeEventDetailsModal = () => {
+    setShowEventDetailsModal(false);
+    setSelectedDayEvents([]);
+  };
+
+  // Función para eliminar evento
+  const handleDeleteEvent = (eventId) => {
+    const confirm = window.confirm('¿Estás seguro de que quieres eliminar este evento?');
+    if (confirm) {
+      const updatedEvents = events.filter(event => event.id !== eventId);
+      setEvents(updatedEvents);
+      
+      const remainingEvents = selectedDayEvents.filter(event => event.id !== eventId);
+      if (remainingEvents.length === 0) {
+        closeEventDetailsModal();
+      } else {
+        setSelectedDayEvents(remainingEvents);
+      }
+      
+      alert('🗑️ Evento eliminado exitosamente');
+    }
+  };
+
+  // Función para editar evento
+  const handleEditEvent = (event) => {
+    setEditingEvent(event);
+    setEventForm({
+      date: event.date,
+      description: event.description
+    });
+    // Cerrar el modal de detalles de eventos
+    setShowEventDetailsModal(false);
+    setSelectedDayEvents([]);
+    // Abrir el modal de edición
+    setShowEventModal(true);
+  };
+
+  // Función para limpiar todos los eventos (opcional)
+  const handleClearAllEvents = () => {
+    const confirm = window.confirm('¿Estás seguro de que quieres eliminar TODOS los eventos del calendario? Esta acción no se puede deshacer.');
+    if (confirm) {
+      setEvents([]);
+      localStorage.removeItem('calendarEvents');
+      setShowEventDetailsModal(false);
+      setSelectedDayEvents([]);
+      alert('🗑️ Todos los eventos han sido eliminados');
+    }
+  };
+
+  // Función para generar el calendario
+  const generateCalendar = () => {
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const currentMonth = today.getMonth();
+    const currentDay = today.getDate();
+
+    const months = [
+      'ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO',
+      'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'
+    ];
+
+    const daysOfWeek = ['D', 'L', 'M', 'M', 'J', 'V', 'S'];
+
+    const getDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
+    const getFirstDayOfMonth = (year, month) => new Date(year, month, 1).getDay();
+
+    return months.map((month, monthIndex) => {
+      const daysInMonth = getDaysInMonth(currentYear, monthIndex);
+      const firstDay = getFirstDayOfMonth(currentYear, monthIndex);
+      const days = [];
+
+      // Días vacíos al inicio
+      for (let i = 0; i < firstDay; i++) {
+        days.push(<div key={`empty-${i}`} className="day"></div>);
+      }
+
+      // Días del mes
+      for (let day = 1; day <= daysInMonth; day++) {
+        const isToday = currentYear === today.getFullYear() && 
+                       monthIndex === currentMonth && 
+                       day === currentDay;
+        
+        const dayEvents = getEventsForDay(currentYear, monthIndex, day);
+        const hasEvents = dayEvents.length > 0;
+        
+        days.push(
+          <div 
+            key={day} 
+            className={`day ${isToday ? 'current-day' : ''} ${hasEvents ? 'has-events clickable' : ''}`}
+            title={hasEvents ? `${dayEvents.length} evento(s) - Clic para ver detalles` : ''}
+            onClick={() => hasEvents && handleDayClick(currentYear, monthIndex, day)}
+          >
+            {day}
+            {hasEvents && (
+              <div className="event-indicator">
+                {dayEvents.length > 1 ? dayEvents.length : '•'}
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      return (
+        <div key={monthIndex} className={`month-card ${monthIndex === currentMonth ? 'current-month' : ''}`}>
+          <h4 className={`month-title ${monthIndex === currentMonth ? 'current-month-title' : ''}`}>{month}</h4>
+          <div className="days-grid">
+            {daysOfWeek.map((dayName, index) => (
+              <div key={index} className="day-header">{dayName}</div>
+            ))}
+            {days}
+          </div>
+        </div>
+      );
+    });
+  };
+
+  // Obtener imagen de perfil del usuario
+  const getUserProfileImage = () => {
+    const stored = localStorage.getItem('userInfo');
+    if (stored) {
+      const userInfo = JSON.parse(stored);
+      return userInfo.fotoPerfil;
+    }
+    return null;
+  };
+
+  const [profileImage, setProfileImage] = useState(getUserProfileImage());
+
+  // Efecto para actualizar imagen de perfil al cambiar en localStorage
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setProfileImage(getUserProfileImage());
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    
+    // También revisar cada vez que el componente se monta
+    const interval = setInterval(() => {
+      const newImage = getUserProfileImage();
+      if (newImage !== profileImage) {
+        setProfileImage(newImage);
+      }
+    }, 1000);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(interval);
+    };
+  }, [profileImage]);
 
   return (
     <div className="intranet-page">
-      <div className="intranet-header">
+      {/* Modal de Evento (Crear/Editar) */}
+      {showEventModal && (
+        <div className="event-modal-overlay" onClick={closeEventModal}>
+          <div className="event-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="event-modal-header">
+              <h3>📅 {editingEvent ? 'Editar Evento' : 'Agregar Evento al Calendario'}</h3>
+              <button className="close-btn" onClick={closeEventModal}>×</button>
+            </div>
+            
+            <form onSubmit={handleSaveEvent} className="event-form">
+              <div className="form-group">
+                <label htmlFor="date">📅 Fecha:</label>
+                <input
+                  type="date"
+                  id="date"
+                  name="date"
+                  value={eventForm.date}
+                  onChange={handleEventFormChange}
+                  required
+                  min={new Date().toISOString().split('T')[0]}
+                />
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="description">📝 Descripción:</label>
+                <textarea
+                  id="description"
+                  name="description"
+                  value={eventForm.description}
+                  onChange={handleEventFormChange}
+                  placeholder="Describe tu evento..."
+                  rows="4"
+                  required
+                />
+              </div>
+              
+              <div className="form-buttons">
+                <button type="button" onClick={closeEventModal} className="cancel-btn">
+                  Cancelar
+                </button>
+                <button type="submit" className="save-btn">
+                  {editingEvent ? '✏️ Actualizar Evento' : '💾 Guardar Evento'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Detalles de Eventos */}
+      {showEventDetailsModal && (
+        <div className="event-modal-overlay" onClick={closeEventDetailsModal}>
+          <div className="event-details-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="event-modal-header">
+              <h3>📅 Eventos del Día</h3>
+              <button className="close-btn" onClick={closeEventDetailsModal}>×</button>
+            </div>
+            
+            <div className="event-details-content">
+              {selectedDayEvents.map((event) => (
+                <div key={event.id} className="event-detail-item">
+                  <div className="event-detail-info">
+                    <div className="event-detail-date">
+                      📅 {new Date(event.date + 'T00:00:00').toLocaleDateString('es-ES', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                    </div>
+                    <div className="event-detail-description">
+                      📝 {event.description}
+                    </div>
+                  </div>
+                  <div className="event-actions">
+                    <button 
+                      className="edit-event-btn"
+                      onClick={() => handleEditEvent(event)}
+                      title="Editar evento"
+                    >
+                      ✏️
+                    </button>
+                    <button 
+                      className="delete-event-btn"
+                      onClick={() => handleDeleteEvent(event.id)}
+                      title="Eliminar evento"
+                    >
+                      🗑️
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Header superior negro */}
+      <div className="intranet-top-header">
         <h1 className="intranet-title">INTRANET</h1>
+        <div className="search-container">
+          <form onSubmit={handleSearchSubmit}>
+            <input 
+              type="text" 
+              placeholder="🔍 Buscar: notificaciones, plataformas, calendario..." 
+              className="search-input"
+              value={searchTerm}
+              onChange={handleSearchChange}
+            />
+            {searchSuggestions.length > 0 && (
+              <div className="search-suggestions">
+                {searchSuggestions.map((suggestion, index) => (
+                  <div 
+                    key={index}
+                    className="search-suggestion-item"
+                    onClick={() => handleSearch(suggestion.section)}
+                  >
+                    🔍 {suggestion.term}
+                  </div>
+                ))}
+              </div>
+            )}
+          </form>
+        </div>
+        <div className="header-icons">
+          <span 
+            className="icon calendar-icon" 
+            onClick={handleCalendarClick}
+            title="Agregar evento al calendario"
+          >
+            📅
+          </span>
+          <span 
+            className="icon user-icon" 
+            onClick={() => navigate('/usuario')}
+            title="Perfil de usuario"
+          >
+            {profileImage ? (
+              <img 
+                src={profileImage} 
+                alt="Foto de perfil" 
+                style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  border: '2px solid #fff'
+                }}
+              />
+            ) : (
+              <img 
+                src="/src/assets/LOGO.png" 
+                alt="Logo" 
+                style={{
+                  width: '40px',
+                  height: '40px'
+                }}
+              />
+            )}
+          </span>
+        </div>
+      </div>
+
+      {/* Header secundario gris */}
+      <div className="secondary-header">
+        <div className="logo-container">
+          <img src="/src/LOGO.png" alt="Logo" className="header-logo" />
+        </div>
         <button 
-          className="logout-btn" 
+          className="logout-btn-new" 
           onClick={() => navigate('/')}
         >
-          Cerrar Sesión
+          LOG-OUT
         </button>
       </div>
-      
-      <div className="intranet-content">
-        <img src="/src/LOGO.png" alt="Logo" className="intranet-logo" />
-        
-        <div className="welcome-section">
-          <h2 className="welcome-title">BIENVENIDO</h2>
+
+      {/* Banner de bienvenida */}
+      <div className="welcome-banner">
+        <h2 className="welcome-text">BIENVENIDO</h2>
+      </div>
+
+      {/* Notificaciones */}
+      <div className="notifications-container" id="notifications">
+        <div className="notifications-content">
+          <h3 className="notifications-title">NOTIFICACIONES</h3>
+          
+          <div className="notification-item">
+            <div className="notification-text">
+              <p><strong>DE: SAUL</strong></p>
+              <p>ayudame porfa para revisar el computador que esta en el puesto de angela</p>
+              <button className="read-more-btn">LEER MAS...</button>
+            </div>
+            <div className="notification-image">
+              <img src="/src/cumpleaños.jpg" alt="Cumpleaños" />
+              <div className="notification-details">
+                <p><strong>¡CUMPLEAÑOS DE LAURA!</strong></p>
+                <p>Celebra en importrans el cumpleaños de nuestra compañera laura en la sala beta a las 4:00 pm</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="notification-item">
+            <div className="notification-text">
+              <p><strong>DE: ADMINISTRACIÓN</strong></p>
+              <p>necesito los informes de administracion a las 12 p.m</p>
+              <button className="read-more-btn">LEER MAS...</button>
+            </div>
+            <div className="notification-image">
+              <img src="/src/capacitacion.png" alt="Capacitación" />
+              <div className="notification-details">
+                <p><strong>CAPACITACION</strong></p>
+                <p>Recordar que a las 11 a.m contamos con una capacitacion laboral</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Sección de Servicios/Plataformas */}
+      <div className="services-container" id="services">
+        <div className="services-grid">
+          <div className="service-card">
+            <div className="service-icon">
+              <img src="/src/requisicion.png" alt="Requisición" />
+            </div>
+            <div className="service-content">
+              <div className="service-info">
+                <span className="service-badge">🏠 REQUISICION</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="service-card">
+            <div className="service-icon">
+              <img src="/src/control.jpeg" alt="Control Comercial" />
+            </div>
+            <div className="service-content">
+              <div className="service-info">
+                <span className="service-badge">🏠 CONTROL COMERCIAL</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="service-card">
+            <div className="service-icon">
+              <img src="/src/MESA.png" alt="Mesa de Servicios" />
+            </div>
+            <div className="service-content">
+              <div className="service-info">
+                <span className="service-badge">🏠 MESA DE SERVICIOS</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="service-card">
+            <div className="service-icon">
+              <img src="/src/registros.png" alt="Registro Académico" />
+            </div>
+            <div className="service-content">
+              <div className="service-info">
+                <span className="service-badge">🏠 REGISTRO PLATAFORMAS</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="service-card center-card">
+            <div className="service-icon">
+              <img src="/src/videos.png" alt="Videos" />
+            </div>
+            <div className="service-content">
+              <div className="service-info">
+                <span className="service-badge">🏠 VIDEOS</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Calendario */}
+      <div className="calendar-container" id="calendar">
+        <div className="calendar-content">
+          <div className="calendar-header">
+            <h3 className="calendar-title">CALENDARIO</h3>
+            <div className="calendar-year">{new Date().getFullYear()}</div>
+          </div>
+          
+          {/* Lista de eventos */}
+          {events.length > 0 && (
+            <div className="events-list">
+              <h4>📋 Eventos Programados ({events.length}):</h4>
+              {events.map((event) => (
+                <div key={event.id} className="event-item">
+                  <span className="event-date">📅 {new Date(event.date + 'T00:00:00').toLocaleDateString('es-ES')}</span>
+                  <span className="event-desc">📝 {event.description}</span>
+                </div>
+              ))}
+            </div>
+          )}
+          
+          <div className="calendar-grid">
+            {generateCalendar()}
+          </div>
+
+          {/* Botón limpiar todo abajo */}
+          {events.length > 0 && (
+            <div className="calendar-footer">
+              <button 
+                className="clear-events-btn"
+                onClick={handleClearAllEvents}
+                title="Eliminar todos los eventos"
+              >
+                🗑️ Limpiar Todos los Eventos
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

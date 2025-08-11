@@ -213,7 +213,12 @@ const Productos = () => {
             </a>
           </li>
           <li>
-            <button className="login-btn">log-in</button>
+            <button 
+              className="login-btn"
+              onClick={() => navigate('/login')}
+            >
+              log-in
+            </button>
           </li>
         </ul>
       </nav>

@@ -331,7 +331,12 @@ const Proyectos = () => {
             </a>
           </li>
           <li>
-            <button className="login-btn">log-in</button>
+            <button 
+              className="login-btn"
+              onClick={() => navigate('/login')}
+            >
+              log-in
+            </button>
           </li>
         </ul>
       </nav>
@@ -367,7 +372,12 @@ const Proyectos = () => {
             </div>
             <h3>Rescate de Fuente Radiactiva Ra-226 – ESE HUS</h3>
             <p>Transporte especializado de materiales radiactivos para sector médico</p>
-            <button className="card-btn">Leer Más</button>
+            <button 
+              className="card-btn"
+              onClick={() => navigate('/rescateFUENTE')}
+            >
+              Leer Más
+            </button>
           </div>
 
           <div className="proyecto-card">
@@ -376,7 +386,12 @@ const Proyectos = () => {
             </div>
             <h3>Desmantelamiento Ciclotron</h3>
             <p>Distribución nacional de dispositivos médicos certificados</p>
-            <button className="card-btn">Leer Más</button>
+            <button 
+              className="card-btn"
+              onClick={() => navigate('/desmantelamiento')}
+            >
+              Leer Más
+            </button>
           </div>
 
           <div className="proyecto-card">
