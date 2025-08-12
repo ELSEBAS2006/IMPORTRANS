@@ -8,8 +8,29 @@ const Intranet = () => {
   const [searchSuggestions, setSearchSuggestions] = useState([]);
   const [showEventModal, setShowEventModal] = useState(false);
   const [showEventDetailsModal, setShowEventDetailsModal] = useState(false);
+  const [showNotificationModal, setShowNotificationModal] = useState(false);
   const [selectedDayEvents, setSelectedDayEvents] = useState([]);
   
+  // Estados para notificaciones
+  const getStoredNotifications = () => {
+    const stored = localStorage.getItem('notifications');
+    if (stored) {
+      return JSON.parse(stored);
+    }
+    return [];
+  };
+
+  const [notifications, setNotifications] = useState(getStoredNotifications());
+  const [notificationForm, setNotificationForm] = useState({
+    departamento: '',
+    descripcion: ''
+  });
+
+  // Guardar notificaciones en localStorage
+  useEffect(() => {
+    localStorage.setItem('notifications', JSON.stringify(notifications));
+  }, [notifications]);
+
   // Función para obtener eventos guardados del localStorage
   const getStoredEvents = () => {
     const stored = localStorage.getItem('calendarEvents');
@@ -42,6 +63,63 @@ const Intranet = () => {
     { term: 'mesa de servicios', section: 'services' },
     { term: 'videos', section: 'services' }
   ];
+
+  // Funciones para notificaciones
+  const handleNotificationClick = () => {
+    setNotificationForm({ departamento: '', descripcion: '' });
+    setShowNotificationModal(true);
+  };
+
+  const closeNotificationModal = () => {
+    setShowNotificationModal(false);
+    setNotificationForm({ departamento: '', descripcion: '' });
+  };
+
+  const handleNotificationFormChange = (e) => {
+    setNotificationForm({
+      ...notificationForm,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSaveNotification = (e) => {
+    e.preventDefault();
+    if (notificationForm.departamento && notificationForm.descripcion) {
+      const newNotification = {
+        id: Date.now(),
+        departamento: notificationForm.departamento,
+        descripcion: notificationForm.descripcion,
+        fecha: new Date().toLocaleString()
+      };
+      
+      const updatedNotifications = [newNotification, ...notifications];
+      setNotifications(updatedNotifications);
+      
+      closeNotificationModal();
+      alert('✅ Notificación creada exitosamente');
+      
+      // Navegar a la sección de notificaciones
+      setTimeout(() => {
+        const notificationsElement = document.getElementById('notifications');
+        if (notificationsElement) {
+          notificationsElement.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      }, 100);
+    }
+  };
+
+  // Función para eliminar notificación
+  const handleDeleteNotification = (notificationId) => {
+    const confirm = window.confirm('¿Estás seguro de que quieres eliminar esta notificación?');
+    if (confirm) {
+      const updatedNotifications = notifications.filter(notification => notification.id !== notificationId);
+      setNotifications(updatedNotifications);
+      alert('🗑️ Notificación eliminada exitosamente');
+    }
+  };
 
   // Función para manejar cambios en el buscador
   const handleSearchChange = (e) => {
@@ -317,8 +395,90 @@ const Intranet = () => {
     };
   }, [profileImage]);
 
+  // Agregar esta función antes del return del componente
+  const getUserName = () => {
+    const stored = localStorage.getItem('userInfo');
+    if (stored) {
+      const userInfo = JSON.parse(stored);
+      return userInfo.nombre || 'Usuario';
+    }
+    return 'Usuario';
+  };
+
+  // Agregar este estado junto con los otros estados existentes
+  const [userName, setUserName] = useState(getUserName());
+
+  // Agregar este useEffect junto con los otros useEffect existentes
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const newUserName = getUserName();
+      if (newUserName !== userName) {
+        setUserName(newUserName);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [userName]);
+
   return (
     <div className="intranet-page">
+      {/* Modal de Notificación */}
+      {showNotificationModal && (
+        <div className="event-modal-overlay" onClick={closeNotificationModal}>
+          <div className="event-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="event-modal-header">
+              <h3>🔔 Crear Nueva Notificación</h3>
+              <button className="close-btn" onClick={closeNotificationModal}>×</button>
+            </div>
+            
+            <form onSubmit={handleSaveNotification} className="event-form">
+              <div className="form-group">
+                <label htmlFor="departamento">🏢 Departamento:</label>
+                <select
+                  id="departamento"
+                  name="departamento"
+                  value={notificationForm.departamento}
+                  onChange={handleNotificationFormChange}
+                  required
+                >
+                  <option value="">Seleccionar departamento</option>
+                  <option value="ADMINISTRACIÓN">ADMINISTRACIÓN</option>
+                  <option value="RECURSOS HUMANOS">RECURSOS HUMANOS</option>
+                  <option value="SISTEMAS">SISTEMAS</option>
+                  <option value="CONTABILIDAD">CONTABILIDAD</option>
+                  <option value="OPERACIONES">OPERACIONES</option>
+                  <option value="COMERCIAL">COMERCIAL</option>
+                  <option value="FRONT OFFICE">FRONT OFFICE</option>
+                  <option value="GERENCIA">GERENCIA</option>
+                </select>
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="descripcion">📝 Descripción:</label>
+                <textarea
+                  id="descripcion"
+                  name="descripcion"
+                  value={notificationForm.descripcion}
+                  onChange={handleNotificationFormChange}
+                  placeholder="Describe el mensaje de la notificación..."
+                  rows="4"
+                  required
+                />
+              </div>
+              
+              <div className="form-buttons">
+                <button type="button" onClick={closeNotificationModal} className="cancel-btn">
+                  Cancelar
+                </button>
+                <button type="submit" className="save-btn">
+                  💾 Crear Notificación
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* Modal de Evento (Crear/Editar) */}
       {showEventModal && (
         <div className="event-modal-overlay" onClick={closeEventModal}>
@@ -445,6 +605,13 @@ const Intranet = () => {
         </div>
         <div className="header-icons">
           <span 
+            className="icon notification-icon" 
+            onClick={handleNotificationClick}
+            title="Crear notificación"
+          >
+            🔔
+          </span>
+          <span 
             className="icon calendar-icon" 
             onClick={handleCalendarClick}
             title="Agregar evento al calendario"
@@ -470,11 +637,14 @@ const Intranet = () => {
               />
             ) : (
               <img 
-                src="/src/assets/LOGO.png" 
-                alt="Logo" 
+                src="/src/assets/PERFIL.png" 
+                alt="Perfil" 
                 style={{
                   width: '40px',
-                  height: '40px'
+                  height: '40px',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  border: '2px solid #fff'
                 }}
               />
             )}
@@ -497,7 +667,7 @@ const Intranet = () => {
 
       {/* Banner de bienvenida */}
       <div className="welcome-banner">
-        <h2 className="welcome-text">BIENVENIDO</h2>
+        <h2 className="welcome-text">BIENVENIDO {userName}</h2>
       </div>
 
       {/* Notificaciones */}
@@ -505,35 +675,31 @@ const Intranet = () => {
         <div className="notifications-content">
           <h3 className="notifications-title">NOTIFICACIONES</h3>
           
-          <div className="notification-item">
-            <div className="notification-text">
-              <p><strong>DE: SAUL</strong></p>
-              <p>ayudame porfa para revisar el computador que esta en el puesto de angela</p>
-              <button className="read-more-btn">LEER MAS...</button>
+          {notifications.length === 0 ? (
+            <div className="no-notifications">
+              <p>📥 No hay notificaciones disponibles</p>
+              <p>Usa el icono 🔔 en la parte superior para crear una nueva notificación</p>
             </div>
-            <div className="notification-image">
-              <img src="/src/cumpleaños.jpg" alt="Cumpleaños" />
-              <div className="notification-details">
-                <p><strong>¡CUMPLEAÑOS DE LAURA!</strong></p>
-                <p>Celebra en importrans el cumpleaños de nuestra compañera laura en la sala beta a las 4:00 pm</p>
+          ) : (
+            notifications.map((notification) => (
+              <div key={notification.id} className="notification-item">
+                <div className="notification-text">
+                  <p><strong>DE: {notification.departamento}</strong></p>
+                  <p>{notification.descripcion}</p>
+                  <div className="notification-meta">
+                    <span className="notification-date">📅 {notification.fecha}</span>
+                    <button 
+                      className="delete-notification-btn"
+                      onClick={() => handleDeleteNotification(notification.id)}
+                      title="Eliminar notificación"
+                    >
+                      🗑️ Eliminar
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-
-          <div className="notification-item">
-            <div className="notification-text">
-              <p><strong>DE: ADMINISTRACIÓN</strong></p>
-              <p>necesito los informes de administracion a las 12 p.m</p>
-              <button className="read-more-btn">LEER MAS...</button>
-            </div>
-            <div className="notification-image">
-              <img src="/src/capacitacion.png" alt="Capacitación" />
-              <div className="notification-details">
-                <p><strong>CAPACITACION</strong></p>
-                <p>Recordar que a las 11 a.m contamos con una capacitacion laboral</p>
-              </div>
-            </div>
-          </div>
+            ))
+          )}
         </div>
       </div>
 

@@ -40,6 +40,9 @@ const Usuario = () => {
     setUserInfo({ ...editForm });
     setIsEditing(false);
     
+    // Disparar evento personalizado para notificar cambios
+    window.dispatchEvent(new Event('storage'));
+    
     const successMessage = document.createElement('div');
     successMessage.className = 'success-toast';
     successMessage.innerHTML = '✓ Perfil actualizado correctamente';

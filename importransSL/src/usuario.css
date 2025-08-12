@@ -32,24 +32,27 @@
 .back-button {
   display: flex;
   align-items: center;
-  gap: 12px;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 14px 28px;
-  border-radius: 12px;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 12px 24px;
+  border-radius: 10px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   transition: all 0.3s ease;
   text-decoration: none;
   backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .back-button:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(9, 18, 66, 0.3);
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
 .header-title {
@@ -78,22 +81,25 @@
 }
 
 .reset-button {
-  width: 54px;
-  height: 54px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   cursor: pointer;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .reset-button:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.1);
-  box-shadow: 0 6px 20px rgba(9, 18, 66, 0.4);
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
 /* Container principal */
@@ -212,32 +218,37 @@
 }
 
 .edit-toggle {
-  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  background: #64748b;
   color: white;
-  border: none;
-  padding: 14px 28px;
-  border-radius: 12px;
+  border: 1px solid #475569;
+  padding: 12px 24px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 600;
   transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+  text-transform: none;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(100, 116, 139, 0.2);
 }
 
 .edit-toggle:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+  background: #475569;
+  border-color: #334155;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(100, 116, 139, 0.25);
 }
 
 .edit-toggle.editing {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
+  background: #dc2626;
+  border-color: #b91c1c;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.2);
 }
 
 .edit-toggle.editing:hover {
-  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+  background: #b91c1c;
+  border-color: #991b1b;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
 }
 
 /* Sección de avatar */
@@ -287,38 +298,45 @@
 
 .change-photo-btn,
 .remove-photo-btn {
-  padding: 12px 24px;
-  border: none;
-  border-radius: 12px;
+  padding: 12px 20px;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
   cursor: pointer;
-  font-size: 14px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 600;
   transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  min-width: 160px;
+  text-transform: none;
+  letter-spacing: 0.3px;
+  min-width: 140px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 .change-photo-btn {
-  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-  color: white;
-  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+  background: #f8fafc;
+  color: #374151;
+  border-color: #d1d5db;
 }
 
 .change-photo-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+  background: #091242;
+  color: white;
+  border-color: #091242;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(9, 18, 66, 0.2);
 }
 
 .remove-photo-btn {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  color: white;
-  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
+  background: #fef2f2;
+  color: #dc2626;
+  border-color: #fecaca;
 }
 
 .remove-photo-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+  background: #dc2626;
+  color: white;
+  border-color: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.2);
 }
 
 .user-basic-info h2 {
@@ -431,24 +449,26 @@
 }
 
 .save-button {
-  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  background: #091242;
   color: white;
-  border: none;
-  padding: 16px 40px;
-  border-radius: 12px;
+  border: 2px solid #091242;
+  padding: 14px 32px;
+  border-radius: 10px;
   cursor: pointer;
-  font-size: 15px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 600;
   transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
-  min-width: 200px;
+  text-transform: none;
+  letter-spacing: 0.5px;
+  box-shadow: 0 3px 10px rgba(9, 18, 66, 0.15);
+  min-width: 180px;
 }
 
 .save-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+  background: #0a1553;
+  border-color: #0a1553;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(9, 18, 66, 0.25);
 }
 
 /* Sección de acciones */
@@ -486,14 +506,27 @@
 }
 
 .action-button.danger {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  color: white;
-  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
+  background: #f8fafc;
+  color: #dc2626;
+  border: 2px solid #fecaca;
+  padding: 16px 32px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-transform: none;
+  letter-spacing: 0.5px;
+  min-width: 180px;
+  box-shadow: 0 3px 10px rgba(220, 38, 38, 0.1);
 }
 
 .action-button.danger:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+  background: #dc2626;
+  color: white;
+  border-color: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.2);
 }
 
 /* Toast de éxito */
