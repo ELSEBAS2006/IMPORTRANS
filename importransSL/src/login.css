@@ -207,11 +207,183 @@
 }
 
 @media (max-width: 480px) {
-  .login-container {
-    padding: 1.5rem;
+  body, html {
+    background: #f8fafc !important;
+    min-height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
   }
-  
-  .form-group {
-    margin-bottom: 1.5rem;
+
+  .login-page {
+    min-height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #f8fafc;
+    padding: 0;
+  }
+
+  .login-container {
+    margin: 0 auto;
+    margin-top: 8vw;
+    margin-bottom: 8vw;
+    box-shadow: 0 4px 18px rgba(13,43,80,0.10);
+    border-radius: 18px;
+    width: 95vw;
+    max-width: 400px;
+    min-width: unset;
+    padding: 2rem 1rem 2.2rem 1rem;
+    background: #fff;
+  }
+
+  .login-form {
+    margin-bottom: 1.2rem;
+  }
+
+  .login-logo {
+    width: 95px;
+    margin-bottom: 2rem;
+    margin-top: 1rem;
+  }
+
+  .login-btn {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+    font-size: 1rem;
+    padding: 0.7rem 0;
+    border-radius: 16px;
+    margin-top: 1.2rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .back-btn {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+    display: block;
+    font-size: 1.15rem;
+    padding: 1.1rem 1.3rem;
+    border-radius: 14px;
+    margin-top: 1.2rem;
+  }
+
+  .form-group input,
+  .password-input-container input {
+    font-size: 1.25rem;
+    padding: 1.5rem 1.7rem;
+    border-radius: 18px;
+  }
+
+  .toggle-password-btn {
+    font-size: 1.5rem;
+    right: 1.4rem;
   }
 }
+
+/* Estilos para la página de intranet */
+.intranet-page {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #f4f7fa;
+  color: #333;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.mobile-nav {
+  display: none;
+  background: #0D2B50;
+  padding: 0.8rem 1rem;
+  border-radius: 0 0 16px 16px;
+  position: relative;
+  z-index: 1000;
+}
+
+.menu-toggle {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.menu-icon {
+  margin-right: 0.5rem;
+}
+
+.menu-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-radius: 0 0 16px 16px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.menu-items.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.menu-link {
+  background: transparent;
+  color: #0D2B50;
+  border: none;
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.menu-link:hover {
+  background: rgba(13, 43, 80, 0.1);
+}
+
+.menu-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.menu-search {
+  margin-top: 0.5rem;
+}
+
+.menu-search input {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  background: #111;
+  color: #fff;
+}
+
+/* Resto de los estilos para la página de intranet... */

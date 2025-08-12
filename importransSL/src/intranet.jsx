@@ -420,8 +420,159 @@ const Intranet = () => {
     return () => clearInterval(interval);
   }, [userName]);
 
+  // --- MENÚ MÓVIL DESPLEGABLE ---
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
+
+  const handleMobileMenuNavigate = (path) => {
+    setMobileMenuOpen(false);
+    if (path === "#notifications") {
+      document.getElementById('notifications')?.scrollIntoView({ behavior: 'smooth' });
+    } else if (path === "#calendar") {
+      document.getElementById('calendar')?.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate(path);
+    }
+  };
+  // --- FIN MENÚ MÓVIL ---
+
   return (
     <div className="intranet-page">
+      {/* Menú móvil */}
+      <div className="mobile-nav" style={{display: 'none'}}>
+        <button
+          className="menu-toggle"
+          aria-label="Abrir menú"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+        >
+          <span className="menu-icon">&#9776;</span>
+        </button>
+        <div className={`menu-items${mobileMenuOpen ? " open" : ""}`}>
+          <button className="menu-link" onClick={() => { setMobileMenuOpen(false); navigate("/"); }}>
+            <b>INTRANET</b>
+          </button>
+          <button
+            className="menu-link"
+            onClick={() => {
+              setMobileMenuOpen(false);
+              setShowNotificationModal(true); // Abre el formulario de notificaciones
+            }}
+          >
+            <span role="img" aria-label="campana">🔔</span> Notificaciones
+          </button>
+          <button
+            className="menu-link"
+            onClick={() => {
+              setMobileMenuOpen(false);
+              setShowEventModal(true); // Abre el formulario de calendario
+            }}
+          >
+            <span role="img" aria-label="calendario">📅</span> Calendario
+          </button>
+          <button
+            className="menu-link"
+            style={{
+              background: "none",
+              border: "none",
+              padding: 0,
+              textAlign: "left",
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              gap: "0.7rem",
+              color: "#fff",
+              cursor: "pointer"
+            }}
+            onClick={() => {
+              setMobileMenuOpen(false);
+              navigate("/usuario");
+            }}
+          >
+            <img
+              src={profileImage || "/src/assets/PERFIL.png"}
+              alt="Perfil"
+              className="menu-avatar"
+              style={{
+                width: "28px",
+                height: "28px",
+                borderRadius: "50%",
+                objectFit: "cover",
+                marginRight: "0.5rem"
+              }}
+            />
+            {userName || "Perfil"}
+          </button>
+          <div className="menu-search" style={{ position: "relative" }}>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (searchSuggestions.length > 0) {
+                  handleSearch(searchSuggestions[0].section);
+                  setMobileMenuOpen(false);
+                }
+              }}
+              autoComplete="off"
+            >
+              <input
+                type="text"
+                placeholder="Buscar..."
+                style={{
+                  width: "100%",
+                  padding: "0.7rem 1rem",
+                  borderRadius: "8px",
+                  border: "none",
+                  fontSize: "1rem",
+                  background: "#111",
+                  color: "#fff",
+                }}
+                value={searchTerm}
+                onChange={(e) => {
+                  handleSearchChange(e);
+                }}
+                onFocus={() => {
+                  if (searchTerm.length > 0 && searchSuggestions.length > 0) setMobileMenuOpen(true);
+                }}
+              />
+              {searchSuggestions.length > 0 && (
+                <div
+                  className="search-suggestions"
+                  style={{
+                    position: "absolute",
+                    top: "110%",
+                    left: 0,
+                    right: 0,
+                    background: "#222",
+                    borderRadius: "8px",
+                    zIndex: 10,
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
+                  }}
+                >
+                  {searchSuggestions.map((suggestion, idx) => (
+                    <div
+                      key={idx}
+                      className="search-suggestion-item"
+                      style={{
+                        padding: "0.7rem 1rem",
+                        color: "#fff",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        handleSearch(suggestion.section);
+                        setMobileMenuOpen(false);
+                      }}
+                    >
+                      🔍 {suggestion.term}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </form>
+          </div>
+        </div>
+      </div>
+      {/* --- FIN MENÚ MÓVIL --- */}
+
       {/* Modal de Notificación */}
       {showNotificationModal && (
         <div className="event-modal-overlay" onClick={closeNotificationModal}>
