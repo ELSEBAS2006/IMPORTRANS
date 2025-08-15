@@ -39,7 +39,7 @@ const ContactModal = ({ showContactModal, setShowContactModal }) => {
         <div className="contact-modal-content">
           {/* Lado izquierdo - Información de contacto */}
           <div className="contact-info-side">
-            <img src="/src/LOGO.png" alt="Logo" className="contact-side-logo" />
+            <img src="/src/LIMPOR.png" alt="Logo" className="contact-side-logo" />
             
             <div className="contact-info-item">
               <span className="icon">📞</span>

@@ -60,8 +60,8 @@ const Login = () => {
   return (
     <div className="login-page">
       <div className="login-container">
-        <img src="/src/LOGO.png" alt="Logo" className="login-logo" />
-        
+        <img src="/src/LIMPOR.png" alt="Logo" className="login-logo" />
+
         <form onSubmit={handleSubmit} className="login-form">
           {error && <div className="error-message">{error}</div>}
           

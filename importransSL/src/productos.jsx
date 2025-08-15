@@ -153,7 +153,7 @@ const Productos = () => {
               navigate('/');
             }}
           >
-            <img src='/src/LOGO.png' alt="Logo" className="logo-img" />
+            <img src='/src/LIMPOR.png' alt="Logo" className="logo-img" />
           </a>
         </div>
 

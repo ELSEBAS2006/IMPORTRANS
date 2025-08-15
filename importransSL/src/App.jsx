@@ -175,7 +175,7 @@ function App() {
       <nav className="navbar">
         <div className="logo">
           <a href="/" onClick={handleInicioClick}>
-            <img src='/src/LOGO.png' alt="Logo" className="logo-img" />
+            <img src='/src/LIMPOR.png' alt="Logo" className="logo-img" />
           </a>
         </div>
 

@@ -806,7 +806,7 @@ const Intranet = () => {
       {/* Header secundario gris */}
       <div className="secondary-header">
         <div className="logo-container">
-          <img src="/src/LOGO.png" alt="Logo" className="header-logo" />
+          <img src="/src/LIMPOR.png" alt="Logo" className="header-logo" />
         </div>
         <button 
           className="logout-btn-new" 
