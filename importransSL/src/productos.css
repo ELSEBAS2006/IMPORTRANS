@@ -765,3 +765,73 @@ body {
     font-size: 0.8rem;
   }
 }
+
+/* Nueva clase para animación de aparición */
+.fade-in-on-scroll {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s, transform 0.8s;
+}
+
+.fade-in-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Animación para el recordatorio flotante */
+@keyframes reminderIn {
+  0% {
+    opacity: 0;
+    transform: translateY(60px) scale(0.95);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-8px) scale(1.03);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.dispensador-reminder {
+  animation: reminderIn 0.7s cubic-bezier(.68,-0.55,.27,1.55);
+}
+
+/* Animación fade-out para el recordatorio */
+.dispensador-reminder.fade-out {
+  opacity: 0;
+  transform: translateY(40px) scale(0.96);
+  transition: opacity 0.5s cubic-bezier(.68,-0.55,.27,1.55), transform 0.5s cubic-bezier(.68,-0.55,.27,1.55);
+}
+
+/* Responsive: Recordatorio también visible y usable en móvil */
+@media (max-width: 600px) {
+  .dispensador-reminder {
+    left: 50%;
+    right: auto;
+    bottom: 18px;
+    transform: translateX(-50%);
+    width: 95vw;
+    min-width: 0;
+    max-width: 98vw;
+    padding: 1.1rem 0.7rem 1rem 0.7rem !important;
+    border-radius: 12px;
+    animation: reminderInMobile 0.7s cubic-bezier(.68,-0.55,.27,1.55);
+  }
+}
+
+@keyframes reminderInMobile {
+  0% {
+    opacity: 0;
+    transform: translateY(60px) scale(0.95) translateX(-50%);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-8px) scale(1.03) translateX(-50%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1) translateX(-50%);
+  }
+}

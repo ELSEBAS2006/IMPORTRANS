@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './intranet.css';
 
 const Intranet = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [searchTerm, setSearchTerm] = useState('');
   const [searchSuggestions, setSearchSuggestions] = useState([]);
   const [showEventModal, setShowEventModal] = useState(false);
@@ -437,6 +439,13 @@ const Intranet = () => {
   };
   // --- FIN MENÚ MÓVIL ---
 
+  useEffect(() => {
+    // Si NO hay token, redirige a login
+    if (!localStorage.getItem('auth')) {
+      navigate('/login', { replace: true });
+    }
+  }, [navigate]);
+
   return (
     <div className="intranet-page">
       {/* Menú móvil */}
@@ -503,6 +512,29 @@ const Intranet = () => {
             />
             {userName || "Perfil"}
           </button>
+          {/* Agrega aquí el botón de LOG-OUT para móvil */}
+          <button
+            className="menu-link"
+            style={{
+              background: "#c62828",
+              color: "#fff",
+              border: "none",
+              borderRadius: "7px",
+              padding: "0.7rem 1.2rem",
+              margin: "1rem 0 0 0",
+              fontWeight: "bold",
+              fontSize: "1rem",
+              width: "100%",
+              textAlign: "center"
+            }}
+            onClick={() => {
+              localStorage.removeItem('auth');
+              navigate('/login', { replace: true });
+            }}
+          >
+            🚪 LOG-OUT
+          </button>
+          {/* Fin botón LOG-OUT */}
           <div className="menu-search" style={{ position: "relative" }}>
             <form
               onSubmit={(e) => {
@@ -810,7 +842,10 @@ const Intranet = () => {
         </div>
         <button 
           className="logout-btn-new" 
-          onClick={() => navigate('/')}
+          onClick={() => {
+            localStorage.removeItem('auth');
+            navigate('/login', { replace: true });
+          }}
         >
           LOG-OUT
         </button>
@@ -901,13 +936,25 @@ const Intranet = () => {
             </div>
           </div>
 
-          <div className="service-card center-card">
+          <div className="service-card">
             <div className="service-icon">
               <img src="/src/videos.png" alt="Videos" />
             </div>
             <div className="service-content">
               <div className="service-info">
                 <span className="service-badge">🏠 VIDEOS</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Nueva tarjeta Documentos */}
+          <div className="service-card">
+            <div className="service-icon">
+              <img src="/src/documentos.png" alt="Documentos" />
+            </div>
+            <div className="service-content">
+              <div className="service-info">
+                <span className="service-badge">🏠 DOCUMENTOS</span>
               </div>
             </div>
           </div>
@@ -958,3 +1005,4 @@ const Intranet = () => {
 };
 
 export default Intranet;
+

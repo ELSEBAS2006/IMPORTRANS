@@ -1,0 +1,167 @@
+.dispensador-main {
+  max-width: 1200px;
+  margin: 2.5rem auto 2rem auto;
+  padding: 0 2vw;
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
+  text-align: center;
+  position: relative; /* Para posicionar el botón absolutamente dentro del main */
+}
+
+.dispensador-titulo-img {
+  width: 480px;
+  max-width: 100vw;
+  margin: 0 auto 2rem auto;
+  display: block;
+  filter: none;
+}
+
+.dispensador-title {
+  font-size: 2.5rem;
+  color: #05063d;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  letter-spacing: 1px;
+  font-family: inherit;
+}
+
+.dispensador-info p {
+  color: #222;
+  font-size: 1.25rem;
+  background: none;
+  border-left: none;
+  border-radius: 0;
+  padding: 0.5rem 0;
+  margin: 0 auto 0 auto;
+  box-shadow: none;
+  max-width: 900px;
+}
+
+.dispensador-img-grande {
+  width: 100%;
+  max-width: 700px;
+  margin: 1.5rem auto 0 auto; /* Solo separa un poco de lo de arriba */
+  display: block;
+}
+
+.dispensador-caracteristicas {
+  margin: 2.2rem auto 0 auto;
+  max-width: 900px;
+  text-align: left;
+  font-size: 1.13rem;
+}
+
+.dispensador-caracteristicas h2 {
+  color: #05063d;
+  font-size: 1.35rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  letter-spacing: 0.5px;
+}
+
+.dispensador-caracteristicas ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.dispensador-caracteristicas li {
+  margin-bottom: 0.7rem;
+  padding-left: 0.2em;
+  color: #222;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.btn-volver-productos {
+  background: #001630;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 0.6rem 1.3rem;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0;
+  margin-top: 0;
+  cursor: pointer;
+  transition: background 0.2s;
+  box-shadow: 0 2px 8px rgba(21,101,192,0.08);
+  display: inline-block;
+  position: absolute;
+  top: -1.2rem;   /* Más arriba */
+  right: 2vw;
+  z-index: 10;
+}
+
+@media (max-width: 600px) {
+  .dispensador-titulo-img {
+    width: 90vw;
+    max-width: 98vw;
+    margin: 2.5rem auto 1.5rem auto; /* Más espacio arriba, menos abajo */
+  }
+
+  .dispensador-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .dispensador-info p {
+    font-size: 1.05rem;
+    padding: 0.7rem 0.2rem;
+    max-width: 98vw;
+  }
+
+  .dispensador-img-grande {
+    width: 100vw;
+    max-width: 99vw;
+    margin: 1.2rem auto 0 auto;
+  }
+
+  .dispensador-caracteristicas {
+    margin: 2.2rem auto 0.5rem auto;
+    padding: 1.1rem 0.7rem 1.2rem 0.7rem;
+    background: #f7faff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(21,101,192,0.07);
+    font-size: 1rem;
+    max-width: 98vw;
+    text-align: left;
+  }
+
+  .dispensador-caracteristicas h2 {
+    font-size: 1.1rem;
+    margin-bottom: 0.7rem;
+    color: #1565c0;
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+
+  .dispensador-caracteristicas ul {
+    padding-left: 0.5em;
+  }
+
+  .dispensador-caracteristicas li {
+    margin-bottom: 0.65rem;
+    padding-left: 0.2em;
+    color: #222;
+    line-height: 1.5;
+    font-size: 0.98em;
+    background: #fff;
+    border-radius: 7px;
+    padding: 0.5em 0.7em;
+    margin-right: 0.2em;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .btn-volver-productos {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border-radius: 5px;
+    position: relative;
+    top: 0;
+    right: 0;
+    margin-top: 1rem;
+    display: inline-block;
+  }
+}

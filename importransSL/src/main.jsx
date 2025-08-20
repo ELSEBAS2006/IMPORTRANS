@@ -10,7 +10,9 @@ import Intranet from './intranet.jsx'
 import Usuario from './usuario.jsx'
 import RescateFUENTE from './rescateFUENTE.jsx'
 import Desmantelamiento from './desmantelamiento.jsx'
+import Dispensador from './dispensador.jsx' // <-- Agrega este import
 import './index.css'
+import './i18n';
 
 const router = createBrowserRouter([
   {
@@ -48,6 +50,10 @@ const router = createBrowserRouter([
   {
     path: "/desmantelamiento",
     element: <Desmantelamiento />,
+  },
+  {
+    path: "/dispensador", // <-- Agrega esta ruta
+    element: <Dispensador />,
   }
 ]);
 

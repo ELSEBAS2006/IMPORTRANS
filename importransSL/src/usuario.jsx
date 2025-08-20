@@ -5,7 +5,7 @@ import './usuario.css';
 const Usuario = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
-  
+
   const getStoredUserInfo = () => {
     const stored = localStorage.getItem('userInfo');
     if (stored) {
@@ -37,17 +37,22 @@ const Usuario = () => {
   };
 
   const handleSave = () => {
-    setUserInfo({ ...editForm });
+    // Solo actualiza los campos editables
+    setUserInfo({
+      ...userInfo,
+      nombre: editForm.nombre,
+      telefono: editForm.telefono,
+      fotoPerfil: editForm.fotoPerfil
+    });
     setIsEditing(false);
-    
-    // Disparar evento personalizado para notificar cambios
+
     window.dispatchEvent(new Event('storage'));
-    
+
     const successMessage = document.createElement('div');
     successMessage.className = 'success-toast';
     successMessage.innerHTML = '✓ Perfil actualizado correctamente';
     document.body.appendChild(successMessage);
-    
+
     setTimeout(() => {
       if (document.body.contains(successMessage)) {
         document.body.removeChild(successMessage);
@@ -94,7 +99,7 @@ const Usuario = () => {
       departamento: 'Front Office',
       fotoPerfil: null
     };
-    
+
     if (window.confirm('¿Restablecer todos los datos?')) {
       setUserInfo(defaultData);
       setEditForm(defaultData);
@@ -107,27 +112,17 @@ const Usuario = () => {
       {/* Header principal */}
       <div className="modern-header">
         <div className="header-content">
-          <button 
-            className="back-button" 
+          <button
+            className="back-button"
             onClick={() => navigate('/intranet')}
           >
             <span>←</span>
             <span>Volver a Intranet</span>
           </button>
-          
+
           <div className="header-title">
             <h1>PERFIL DE USUARIO</h1>
             <p>Administra tu información personal</p>
-          </div>
-          
-          <div className="header-actions">
-            <button 
-              className="reset-button"
-              onClick={handleResetData}
-              title="Restablecer datos"
-            >
-              🔄
-            </button>
           </div>
         </div>
       </div>
@@ -143,7 +138,7 @@ const Usuario = () => {
                 Información Personal
               </span>
             </div>
-            <button 
+            <button
               className={`edit-toggle ${isEditing ? 'editing' : ''}`}
               onClick={() => isEditing ? handleCancel() : setIsEditing(true)}
             >
@@ -155,9 +150,9 @@ const Usuario = () => {
           <div className="avatar-section">
             <div className="avatar-container">
               {userInfo.fotoPerfil ? (
-                <img 
-                  src={userInfo.fotoPerfil} 
-                  alt="Foto de perfil" 
+                <img
+                  src={userInfo.fotoPerfil}
+                  alt="Foto de perfil"
                   className="profile-image"
                 />
               ) : (
@@ -166,17 +161,17 @@ const Usuario = () => {
                 </div>
               )}
             </div>
-            
+
             {/* Botones de foto debajo del círculo */}
             <div className="photo-actions">
-              <button 
+              <button
                 className="change-photo-btn"
                 onClick={() => fileInputRef.current?.click()}
               >
                 📷 Cambiar Foto
               </button>
               {userInfo.fotoPerfil && (
-                <button 
+                <button
                   className="remove-photo-btn"
                   onClick={handleRemoveImage}
                 >
@@ -184,7 +179,7 @@ const Usuario = () => {
                 </button>
               )}
             </div>
-            
+
             <input
               ref={fileInputRef}
               type="file"
@@ -192,7 +187,7 @@ const Usuario = () => {
               onChange={handleImageUpload}
               style={{ display: 'none' }}
             />
-            
+
             <div className="user-basic-info">
               <h2>{userInfo.nombre}</h2>
               <p className="user-role">Empleado</p>
@@ -204,7 +199,7 @@ const Usuario = () => {
           <div className="form-container">
             <div className="form-grid">
               <div className="input-group">
-                <label>Nombre Completo</label>
+                <label>Nombre</label>
                 {isEditing ? (
                   <input
                     type="text"
@@ -221,18 +216,8 @@ const Usuario = () => {
 
               <div className="input-group">
                 <label>Correo Electrónico</label>
-                {isEditing ? (
-                  <input
-                    type="email"
-                    name="email"
-                    value={editForm.email}
-                    onChange={handleInputChange}
-                    className="modern-input"
-                    placeholder="usuario@importransradiactivos.com"
-                  />
-                ) : (
-                  <div className="info-display">{userInfo.email}</div>
-                )}
+                {/* No editable */}
+                <div className="info-display">{userInfo.email}</div>
               </div>
 
               <div className="input-group">
@@ -253,52 +238,27 @@ const Usuario = () => {
 
               <div className="input-group">
                 <label>Fecha de Ingreso</label>
-                {isEditing ? (
-                  <input
-                    type="date"
-                    name="fechaIngreso"
-                    value={editForm.fechaIngreso}
-                    onChange={handleInputChange}
-                    className="modern-input"
-                  />
-                ) : (
-                  <div className="info-display">
-                    {new Date(userInfo.fechaIngreso).toLocaleDateString('es-ES', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    })}
-                  </div>
-                )}
+                {/* No editable */}
+                <div className="info-display">
+                  {new Date(userInfo.fechaIngreso).toLocaleDateString('es-ES', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </div>
               </div>
 
               <div className="input-group">
                 <label>Departamento</label>
-                {isEditing ? (
-                  <select
-                    name="departamento"
-                    value={editForm.departamento}
-                    onChange={handleInputChange}
-                    className="modern-input"
-                  >
-                    <option value="Front Office">Front Office</option>
-                    <option value="Recursos Humanos">Recursos Humanos</option>
-                    <option value="Sistemas">Sistemas</option>
-                    <option value="Contabilidad">Contabilidad</option>
-                    <option value="Operaciones">Operaciones</option>
-                    <option value="Comercial">Comercial</option>
-                    <option value="Administración">Administración</option>
-                  </select>
-                ) : (
-                  <div className="info-display">{userInfo.departamento}</div>
-                )}
+                {/* No editable */}
+                <div className="info-display">{userInfo.departamento}</div>
               </div>
             </div>
 
             {/* Botón de guardar */}
             {isEditing && (
               <div className="save-section">
-                <button 
+                <button
                   className="save-button"
                   onClick={handleSave}
                 >
@@ -310,7 +270,7 @@ const Usuario = () => {
 
           {/* Acciones */}
           <div className="actions-section">
-            <button 
+            <button
               className="action-button danger"
               onClick={() => navigate('/')}
             >

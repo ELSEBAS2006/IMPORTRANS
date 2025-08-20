@@ -378,6 +378,12 @@
 .service-card:nth-child(4) {
   border-left: 4px solid #f59e0b;
 }
+.service-card:nth-child(5) {
+  border-left: 4px solid #000000;
+}
+.service-card:nth-child(6) {
+  border-left: 4px solid #f50bce;
+}
 
 /* LA CARTA DE VIDEOS SE MANTIENE IGUAL - SIN CAMBIOS */
 .center-card {

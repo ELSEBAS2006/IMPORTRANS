@@ -1690,3 +1690,43 @@
     transform: translateY(0);
   }
 }
+
+/* Puedes agregar esto a tu index.css o un archivo global */
+/* filepath: c:\Users\user\Desktop\IMPORTRANS VITE\importransSL\src\index.css */
+.whatsapp-reminder:hover {
+  background: #128C7E;
+  color: #fff;
+  text-decoration: none;
+}
+
+@keyframes whatsappIn {
+  0% {
+    opacity: 0;
+    transform: translateY(60px) scale(0.95);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-8px) scale(1.03);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.whatsapp-reminder-animated:hover {
+  background: #128C7E;
+  color: #fff;
+  text-decoration: none;
+}
+
+@media (max-width: 600px) {
+  .whatsapp-reminder-animated {
+    right: 10px !important;
+    bottom: 10px !important;
+    font-size: 0.98rem !important;
+    padding: 0.7rem 1rem 0.7rem 0.8rem !important;
+    border-radius: 12px !important;
+    max-width: 95vw;
+  }
+}
