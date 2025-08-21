@@ -6,8 +6,7 @@ i18n.use(initReactI18next).init({
     es: {
       translation: {
         // Navbar y generales
-        "Bienvenido": "Bienvenido",
-        "Inicio": "Inicio",
+        "Inicio": "home",
         "Productos": "Productos",
         "Servicios": "Servicios",
         "Proyectos": "Proyectos",

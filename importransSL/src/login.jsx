@@ -51,6 +51,7 @@ const Login = () => {
     // Validar credenciales específicas
     if (loginData.email === 'admin@importransradiactivos.com' && loginData.password === 'Admin123!') {
       console.log('Login exitoso');
+      localStorage.setItem('auth', 'ok');
       navigate('/intranet'); // Redirigir a intranet
     } else {
       setError('Correo o contraseña incorrectos');

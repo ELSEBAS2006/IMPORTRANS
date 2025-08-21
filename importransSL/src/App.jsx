@@ -4,6 +4,7 @@ import './index.css';
 import ContactModal from './contacto';
 import { useTranslation } from 'react-i18next';
 import { FaWhatsapp } from "react-icons/fa";
+import { FaRobot } from "react-icons/fa"; // Para icono de bot
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -13,7 +14,6 @@ function App() {
   const [showPQRModal, setShowPQRModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
   const [showLangMenu, setShowLangMenu] = useState(false);
-  const [showWhatsapp, setShowWhatsapp] = useState(false);
   const [pqrData, setPqrData] = useState({
     opcion: '',
     nombres: '',
@@ -23,11 +23,17 @@ function App() {
     telefono: '',
     objeto: ''
   });
+  const [showChat, setShowChat] = useState(false); // El chat inicia oculto
+  const [showWhatsappReminder, setShowWhatsappReminder] = useState(false); // Cambia a false por defecto
+  const [chatInput, setChatInput] = useState('');
+  const [chatMessages, setChatMessages] = useState([
+    { from: 'bot', text: '¡Hola! ¿En qué puedo ayudarte? Puedes preguntar por: horarios, servicios, ubicación, productos o escribe "contacto" para hablar por WhatsApp.' }
+  ]);
   const aboutTextRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowWhatsapp(true), 2000);
+    const timer = setTimeout(() => setShowWhatsappReminder(true), 2000); // Cambia 3000 a 2000
     return () => clearTimeout(timer);
   }, []);
 
@@ -77,6 +83,43 @@ function App() {
   };
 
   const whatsappLink = "https://wa.me/573209978052?text=Estoy%20interesado%20en%20recibir%20informacion";
+
+  const faqAnswers = {
+    'horario': 'Nuestro horario de atención es de lunes a viernes de 8am a 5pm.',
+    'servicio': 'Ofrecemos transporte, importación y distribución de material radiactivo, dispositivos médicos y más.',
+    'ubicación': 'Estamos ubicados en Bogotá, puedes ver el mapa en la sección "Ubícanos" de la web.',
+    'producto': 'Consulta todos nuestros productos en la sección Productos del menú principal.'
+  };
+
+  const handleSendChat = (e) => {
+    e.preventDefault();
+    if (!chatInput.trim()) return;
+    const userMsg = { from: 'user', text: chatInput };
+    setChatMessages((msgs) => [...msgs, userMsg]);
+
+    // Si el usuario escribe "contacto", redirige a WhatsApp
+    if (chatInput.toLowerCase().includes('contacto')) {
+      setTimeout(() => {
+        window.open('https://wa.me/573175105541?text=Hola,%20quiero%20más%20información', '_blank');
+        setChatMessages((msgs) => [
+          ...msgs,
+          { from: 'bot', text: 'Te estoy redirigiendo a WhatsApp para que hables con nosotros.' }
+        ]);
+      }, 700);
+      setChatInput('');
+      return;
+    }
+
+    // Busca respuesta simple
+    const key = Object.keys(faqAnswers).find(k => chatInput.toLowerCase().includes(k));
+    setTimeout(() => {
+      setChatMessages((msgs) => [
+        ...msgs,
+        { from: 'bot', text: key ? faqAnswers[key] : 'Lo siento, no tengo una respuesta para esa pregunta. ¿Puedes intentar con otra o escribir "contacto" para hablar por WhatsApp?' }
+      ]);
+    }, 700);
+    setChatInput('');
+  };
 
   return (
     <div className="App">
@@ -411,9 +454,9 @@ function App() {
       </footer>
 
       {/* Recordatorio flotante WhatsApp */}
-      {showWhatsapp && (
+      {!showChat && showWhatsappReminder && (
         <div
-          className="whatsapp-reminder-animated"
+          className="whatsapp-reminder-animated fade-in"
           style={{
             position: "fixed",
             bottom: "28px",
@@ -430,27 +473,28 @@ function App() {
             fontSize: "1.08rem",
             textDecoration: "none",
             gap: "0.7rem",
-            transition: "background 0.2s",
-            animation: "whatsappIn 0.7s cubic-bezier(.68,-0.55,.27,1.55)"
+            transition: "background 0.2s"
           }}
         >
-          <a
-            href={whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            onClick={() => setShowChat(true)}
             style={{
+              background: "none",
+              border: "none",
+              color: "#fff",
+              fontSize: "1.1rem",
               display: "flex",
               alignItems: "center",
-              color: "#fff",
-              textDecoration: "none",
-              gap: "0.7rem"
+              gap: "0.7rem",
+              cursor: "pointer"
             }}
+            aria-label="Abrir chat"
           >
             <FaWhatsapp size={28} style={{ flexShrink: 0 }} />
             {t("¿Tienes dudas? Escríbenos por WhatsApp")}
-          </a>
+          </button>
           <button
-            onClick={() => setShowWhatsapp(false)}
+            onClick={() => setShowWhatsappReminder(false)}
             style={{
               background: "none",
               border: "none",
@@ -463,6 +507,117 @@ function App() {
           >
             ×
           </button>
+        </div>
+      )}
+
+      {showChat && (
+        <div
+          className="chatbox-faq"
+          style={{
+            position: "fixed",
+            bottom: "28px",
+            right: "28px",
+            zIndex: 9999,
+            width: "320px",
+            background: "#fff",
+            borderRadius: "18px",
+            boxShadow: "0 4px 24px rgba(0,0,0,0.15)",
+            display: "flex",
+            flexDirection: "column"
+          }}
+        >
+          <div style={{
+            background: "#25D366",
+            color: "#fff",
+            borderTopLeftRadius: "18px",
+            borderTopRightRadius: "18px",
+            padding: "0.8rem 1rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between"
+          }}>
+            <span style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <FaRobot /> Chat Importrans
+            </span>
+            <button
+              onClick={() => setShowChat(false)}
+              style={{
+                background: "none",
+                border: "none",
+                color: "#fff",
+                fontSize: "1.3rem",
+                cursor: "pointer"
+              }}
+              aria-label="Cerrar chat"
+            >×</button>
+          </div>
+          <div style={{
+            flex: 1,
+            padding: "1rem",
+            overflowY: "auto",
+            maxHeight: "260px"
+          }}>
+            {chatMessages.map((msg, idx) => (
+              <div
+                key={idx}
+                style={{
+                  marginBottom: "0.7rem",
+                  textAlign: msg.from === 'user' ? 'right' : 'left'
+                }}
+              >
+                <span
+                  style={{
+                    display: "inline-block",
+                    background: msg.from === 'user' ? "#e0f7fa" : "#f1f1f1",
+                    color: "#222",
+                    borderRadius: "12px",
+                    padding: "0.5rem 0.9rem",
+                    maxWidth: "85%",
+                    fontSize: "1rem"
+                  }}
+                >
+                  {msg.text}
+                </span>
+              </div>
+            ))}
+          </div>
+          <form
+            onSubmit={handleSendChat}
+            style={{
+              display: "flex",
+              borderTop: "1px solid #eee",
+              padding: "0.5rem"
+            }}
+          >
+            <input
+              type="text"
+              value={chatInput}
+              onChange={e => setChatInput(e.target.value)}
+              placeholder="Escribe tu pregunta..."
+              style={{
+                flex: 1,
+                border: "none",
+                outline: "none",
+                fontSize: "1rem",
+                padding: "0.5rem"
+              }}
+            />
+            <button
+              type="submit"
+              style={{
+                background: "#25D366",
+                color: "#fff",
+                border: "none",
+                borderRadius: "8px",
+                padding: "0.5rem 1rem",
+                marginLeft: "0.5rem",
+                fontWeight: "bold",
+                cursor: "pointer"
+              }}
+            >
+              Enviar
+            </button>
+          </form>
         </div>
       )}
     </div>
