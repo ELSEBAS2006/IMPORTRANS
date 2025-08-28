@@ -698,8 +698,7 @@ const Intranet = () => {
                   value={eventForm.date}
                   onChange={handleEventFormChange}
                   required
-                  readOnly={!!eventForm.date && !editingEvent} // Solo lectura si viene del calendario y no está editando
-                  style={!!eventForm.date && !editingEvent ? { background: "#f1f5f9", color: "#64748b" } : {}}
+                  style={editingEvent ? {} : { background: "#f1f5f9", color: "#64748b" }}
                 />
               </div>
               
@@ -852,18 +851,7 @@ const Intranet = () => {
           </span>
           {/* LOG-OUT BUTTON ARRIBA */}
           <button 
-            className="logout-btn-new" 
-            style={{
-              marginLeft: "1.2rem",
-              background: "#c62828",
-              color: "#fff",
-              border: "none",
-              borderRadius: "7px",
-              padding: "0.5rem 1.1rem",
-              fontWeight: "bold",
-              fontSize: "0.95rem",
-              cursor: "pointer"
-            }}
+            className="logout-btn-new"
             onClick={() => {
               localStorage.removeItem('auth');
               navigate('/login', { replace: true });
