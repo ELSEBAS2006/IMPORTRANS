@@ -239,10 +239,16 @@ const Intranet = () => {
 
   // Función para manejar clic en día del calendario
   const handleDayClick = (year, month, day) => {
+    const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     const dayEvents = getEventsForDay(year, month, day);
     if (dayEvents.length > 0) {
       setSelectedDayEvents(dayEvents);
       setShowEventDetailsModal(true);
+    } else {
+      // Si no hay eventos, abrir modal para agregar evento con la fecha seleccionada
+      setEditingEvent(null);
+      setEventForm({ date: dateString, description: '' });
+      setShowEventModal(true);
     }
   };
 
@@ -335,9 +341,9 @@ const Intranet = () => {
         days.push(
           <div 
             key={day} 
-            className={`day ${isToday ? 'current-day' : ''} ${hasEvents ? 'has-events clickable' : ''}`}
-            title={hasEvents ? `${dayEvents.length} evento(s) - Clic para ver detalles` : ''}
-            onClick={() => hasEvents && handleDayClick(currentYear, monthIndex, day)}
+            className={`day ${isToday ? 'current-day' : ''} clickable ${hasEvents ? 'has-events' : ''}`}
+            title={hasEvents ? `${dayEvents.length} evento(s) - Clic para ver o agregar` : 'Clic para agregar evento'}
+            onClick={() => handleDayClick(currentYear, monthIndex, day)}
           >
             {day}
             {hasEvents && (
@@ -445,6 +451,27 @@ const Intranet = () => {
       navigate('/login', { replace: true });
     }
   }, [navigate]);
+
+  // Agrega esta función antes del return del componente
+  const getUserDepartment = () => {
+    const stored = localStorage.getItem('userInfo');
+    if (stored) {
+      const userInfo = JSON.parse(stored);
+      return userInfo.departamento || '';
+    }
+    return '';
+  };
+
+  // Cuando abras el modal de notificación, pon el departamento automáticamente
+  useEffect(() => {
+    if (showNotificationModal) {
+      setNotificationForm(form => ({
+        ...form,
+        departamento: getUserDepartment()
+      }));
+    }
+    // eslint-disable-next-line
+  }, [showNotificationModal]);
 
   return (
     <div className="intranet-page">
@@ -617,23 +644,13 @@ const Intranet = () => {
             <form onSubmit={handleSaveNotification} className="event-form">
               <div className="form-group">
                 <label htmlFor="departamento">🏢 Departamento:</label>
-                <select
+                <input
                   id="departamento"
                   name="departamento"
                   value={notificationForm.departamento}
-                  onChange={handleNotificationFormChange}
-                  required
-                >
-                  <option value="">Seleccionar departamento</option>
-                  <option value="ADMINISTRACIÓN">ADMINISTRACIÓN</option>
-                  <option value="RECURSOS HUMANOS">RECURSOS HUMANOS</option>
-                  <option value="SISTEMAS">SISTEMAS</option>
-                  <option value="CONTABILIDAD">CONTABILIDAD</option>
-                  <option value="OPERACIONES">OPERACIONES</option>
-                  <option value="COMERCIAL">COMERCIAL</option>
-                  <option value="FRONT OFFICE">FRONT OFFICE</option>
-                  <option value="GERENCIA">GERENCIA</option>
-                </select>
+                  readOnly
+                  style={{ background: "#f1f5f9", color: "#64748b", fontWeight: "bold" }}
+                />
               </div>
               
               <div className="form-group">
@@ -681,7 +698,8 @@ const Intranet = () => {
                   value={eventForm.date}
                   onChange={handleEventFormChange}
                   required
-                  min={new Date().toISOString().split('T')[0]}
+                  readOnly={!!eventForm.date && !editingEvent} // Solo lectura si viene del calendario y no está editando
+                  style={!!eventForm.date && !editingEvent ? { background: "#f1f5f9", color: "#64748b" } : {}}
                 />
               </div>
               
@@ -832,26 +850,34 @@ const Intranet = () => {
               />
             )}
           </span>
+          {/* LOG-OUT BUTTON ARRIBA */}
+          <button 
+            className="logout-btn-new" 
+            style={{
+              marginLeft: "1.2rem",
+              background: "#c62828",
+              color: "#fff",
+              border: "none",
+              borderRadius: "7px",
+              padding: "0.5rem 1.1rem",
+              fontWeight: "bold",
+              fontSize: "0.95rem",
+              cursor: "pointer"
+            }}
+            onClick={() => {
+              localStorage.removeItem('auth');
+              navigate('/login', { replace: true });
+            }}
+          >
+            LOG-OUT
+          </button>
         </div>
       </div>
 
-      {/* Header secundario gris */}
-      <div className="secondary-header">
-        <div className="logo-container">
-          <img src="/src/LIMPOR.png" alt="Logo" className="header-logo" />
-        </div>
-        <button 
-          className="logout-btn-new" 
-          onClick={() => {
-            localStorage.removeItem('auth');
-            navigate('/login', { replace: true });
-          }}
-        >
-          LOG-OUT
-        </button>
-      </div>
+      {/* Espacio extra para bajar el banner de bienvenida */}
+      <div style={{ height: "3.5rem" }} />
 
-      {/* Banner de bienvenida */}
+      {/* Banner de bienvenida más abajo */}
       <div className="welcome-banner">
         <h2 className="welcome-text">BIENVENIDO {userName}</h2>
       </div>
@@ -969,16 +995,18 @@ const Intranet = () => {
             <div className="calendar-year">{new Date().getFullYear()}</div>
           </div>
           
-          {/* Lista de eventos */}
+          {/* Lista de eventos ORDENADA por fecha más próxima */}
           {events.length > 0 && (
             <div className="events-list">
               <h4>📋 Eventos Programados ({events.length}):</h4>
-              {events.map((event) => (
-                <div key={event.id} className="event-item">
-                  <span className="event-date">📅 {new Date(event.date + 'T00:00:00').toLocaleDateString('es-ES')}</span>
-                  <span className="event-desc">📝 {event.description}</span>
-                </div>
-              ))}
+              {[...events]
+                .sort((a, b) => new Date(a.date) - new Date(b.date))
+                .map((event) => (
+                  <div key={event.id} className="event-item">
+                    <span className="event-date">📅 {new Date(event.date + 'T00:00:00').toLocaleDateString('es-ES')}</span>
+                    <span className="event-desc">📝 {event.description}</span>
+                  </div>
+                ))}
             </div>
           )}
           
@@ -1005,4 +1033,3 @@ const Intranet = () => {
 };
 
 export default Intranet;
-

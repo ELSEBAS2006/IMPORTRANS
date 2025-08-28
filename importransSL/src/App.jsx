@@ -87,7 +87,7 @@ function App() {
   const faqAnswers = {
     'horario': 'Nuestro horario de atención es de lunes a viernes de 8am a 5pm.',
     'servicio': 'Ofrecemos transporte, importación y distribución de material radiactivo, dispositivos médicos y más.',
-    'ubicación': 'Estamos ubicados en Bogotá, puedes ver el mapa en la sección "Ubícanos" de la web.',
+    'ubicacion': 'Estamos ubicados en Cota, Cundinamarca, en el Centro Empresarial Cien Oikos.Puedes Ver en el mapa en la seccion de ubicanos',
     'producto': 'Consulta todos nuestros productos en la sección Productos del menú principal.'
   };
 
