@@ -13,9 +13,9 @@ const Usuario = () => {
     }
     return {
       nombre: 'Introduce Cook',
-      email: 'usuario@importransradiactivos.com',
       telefono: '+57 317 510 5541',
-      fechaIngreso: '2024-01-15',
+      email: 'usuario@importransradiactivos.com',
+      fechaIngreso: '2019-09-29',
       departamento: 'Front Office',
       fotoPerfil: null
     };
@@ -36,8 +36,8 @@ const Usuario = () => {
     });
   };
 
-  const handleSave = () => {
-    // Solo actualiza los campos editables
+  const handleSave = (e) => {
+    e.preventDefault();
     setUserInfo({
       ...userInfo,
       nombre: editForm.nombre,
@@ -45,8 +45,6 @@ const Usuario = () => {
       fotoPerfil: editForm.fotoPerfil
     });
     setIsEditing(false);
-
-    window.dispatchEvent(new Event('storage'));
 
     const successMessage = document.createElement('div');
     successMessage.className = 'success-toast';
@@ -81,105 +79,24 @@ const Usuario = () => {
     }
   };
 
-  const handleRemoveImage = () => {
-    const newUserInfo = {
-      ...userInfo,
-      fotoPerfil: null
-    };
-    setUserInfo(newUserInfo);
-    setEditForm(newUserInfo);
-  };
-
-  const handleResetData = () => {
-    const defaultData = {
-      nombre: 'Introduce Cook',
-      email: 'usuario@importransradiactivos.com',
-      telefono: '+57 317 510 5541',
-      fechaIngreso: '2024-01-15',
-      departamento: 'Front Office',
-      fotoPerfil: null
-    };
-
-    if (window.confirm('¿Restablecer todos los datos?')) {
-      setUserInfo(defaultData);
-      setEditForm(defaultData);
-      localStorage.removeItem('userInfo');
-    }
-  };
-
   return (
-    <div className="usuario-page">
-      {/* Header principal */}
-      <div className="modern-header">
-        <div className="header-content">
-          <button
-            className="back-button"
-            onClick={() => navigate('/intranet')}
-          >
-            <span>←</span>
-            <span>Volver a Intranet</span>
-          </button>
-
-          <div className="header-title">
-            <h1>PERFIL DE USUARIO</h1>
-            <p>Administra tu información personal</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Container principal */}
-      <div className="main-container">
-        {/* Tarjeta principal */}
-        <div className="profile-card">
-          {/* Header de la tarjeta */}
-          <div className="card-header">
-            <div>
-              <span style={{ color: '#1e293b', fontSize: '22px', fontWeight: '700' }}>
-                Información Personal
-              </span>
-            </div>
+    <div className="profile-bg">
+      <div className="profile-container">
+        {/* Left Card */}
+        <div className="profile-left">
+          <div className="profile-user-name">{userInfo.nombre}</div>
+          <div className="profile-avatar-box">
+            <img
+              src={userInfo.fotoPerfil || '/src/assets/PERFIL.png'}
+              alt="Foto de perfil"
+              className="profile-avatar-img"
+            />
             <button
-              className={`edit-toggle ${isEditing ? 'editing' : ''}`}
-              onClick={() => isEditing ? handleCancel() : setIsEditing(true)}
+              className="profile-upload-btn"
+              onClick={() => fileInputRef.current?.click()}
             >
-              {isEditing ? 'Cancelar' : 'Editar Perfil'}
+              nueva foto
             </button>
-          </div>
-
-          {/* Sección de avatar */}
-          <div className="avatar-section">
-            <div className="avatar-container">
-              {userInfo.fotoPerfil ? (
-                <img
-                  src={userInfo.fotoPerfil}
-                  alt="Foto de perfil"
-                  className="profile-image"
-                />
-              ) : (
-                <div className="default-avatar">
-                  <span>👤</span>
-                </div>
-              )}
-            </div>
-
-            {/* Botones de foto debajo del círculo */}
-            <div className="photo-actions">
-              <button
-                className="change-photo-btn"
-                onClick={() => fileInputRef.current?.click()}
-              >
-                📷 Cambiar Foto
-              </button>
-              {userInfo.fotoPerfil && (
-                <button
-                  className="remove-photo-btn"
-                  onClick={handleRemoveImage}
-                >
-                  🗑️ Eliminar Foto
-                </button>
-              )}
-            </div>
-
             <input
               ref={fileInputRef}
               type="file"
@@ -187,96 +104,114 @@ const Usuario = () => {
               onChange={handleImageUpload}
               style={{ display: 'none' }}
             />
-
-            <div className="user-basic-info">
-              <h2>{userInfo.nombre}</h2>
-              <p className="user-role">Empleado</p>
-              <span className="user-department">{userInfo.departamento}</span>
-            </div>
-          </div>
-
-          {/* Formulario de información */}
-          <div className="form-container">
-            <div className="form-grid">
-              <div className="input-group">
-                <label>Nombre</label>
-                {isEditing ? (
-                  <input
-                    type="text"
-                    name="nombre"
-                    value={editForm.nombre}
-                    onChange={handleInputChange}
-                    className="modern-input"
-                    placeholder="Introduce Cook"
-                  />
-                ) : (
-                  <div className="info-display">{userInfo.nombre}</div>
-                )}
-              </div>
-
-              <div className="input-group">
-                <label>Correo Electrónico</label>
-                {/* No editable */}
-                <div className="info-display">{userInfo.email}</div>
-              </div>
-
-              <div className="input-group">
-                <label>Teléfono</label>
-                {isEditing ? (
-                  <input
-                    type="tel"
-                    name="telefono"
-                    value={editForm.telefono}
-                    onChange={handleInputChange}
-                    className="modern-input"
-                    placeholder="+57 317 510 5541"
-                  />
-                ) : (
-                  <div className="info-display">{userInfo.telefono}</div>
-                )}
-              </div>
-
-              <div className="input-group">
-                <label>Fecha de Ingreso</label>
-                {/* No editable */}
-                <div className="info-display">
-                  {new Date(userInfo.fechaIngreso).toLocaleDateString('es-ES', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                  })}
-                </div>
-              </div>
-
-              <div className="input-group">
-                <label>Departamento</label>
-                {/* No editable */}
-                <div className="info-display">{userInfo.departamento}</div>
-              </div>
-            </div>
-
-            {/* Botón de guardar */}
-            {isEditing && (
-              <div className="save-section">
-                <button
-                  className="save-button"
-                  onClick={handleSave}
-                >
-                  💾 Guardar Cambios
-                </button>
-              </div>
-            )}
-          </div>
-
-          {/* Acciones */}
-          <div className="actions-section">
             <button
-              className="action-button danger"
-              onClick={() => navigate('/')}
+              className="profile-intranet-btn"
+              onClick={() => navigate('/intranet')}
+              style={{ marginTop: "1rem" }}
             >
-              🚪 Cerrar Sesión
+              Volver a la Intranet
             </button>
           </div>
+        </div>
+        {/* Right Card */}
+        <div className="profile-right">
+          <div className="profile-edit-title">Editar Perfil</div>
+          <div className="profile-tabs">
+            <div className="profile-tab active">Información de Usuario</div>
+          </div>
+          <form className="profile-form" onSubmit={handleSave}>
+            <div className="profile-form-row">
+              <div className="profile-form-group">
+                <label>Nombre</label>
+                <input
+                  type="text"
+                  name="nombre"
+                  value={editForm.nombre}
+                  onChange={handleInputChange}
+                  disabled={!isEditing}
+                  required
+                />
+              </div>
+              <div className="profile-form-group">
+                <label>Teléfono</label>
+                <input
+                  type="text"
+                  name="telefono"
+                  value={editForm.telefono}
+                  onChange={handleInputChange}
+                  disabled={!isEditing}
+                  required
+                />
+              </div>
+            </div>
+            <div className="profile-form-row">
+              <div className="profile-form-group">
+                <label>Correo</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={editForm.email}
+                  disabled
+                />
+              </div>
+              <div className="profile-form-group">
+                <label>Fecha de Ingreso</label>
+                <input
+                  type="text"
+                  name="fechaIngreso"
+                  value={new Date(editForm.fechaIngreso).toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric'
+                  })}
+                  disabled
+                />
+              </div>
+            </div>
+            <div className="profile-form-row">
+              <div className="profile-form-group">
+                <label>Departamento</label>
+                <input
+                  type="text"
+                  name="departamento"
+                  value={editForm.departamento}
+                  disabled
+                />
+              </div>
+              <div className="profile-form-group"></div>
+            </div>
+            <div className="profile-form-actions">
+              {isEditing ? (
+                <>
+                  <button
+                    type="button"
+                    className="profile-update-btn"
+                    onClick={handleSave}
+                  >
+                    Confirmar
+                  </button>
+                  <button
+                    type="button"
+                    className="profile-cancel-btn"
+                    onClick={handleCancel}
+                  >
+                    Cancelar
+                  </button>
+                </>
+              ) : (
+                <button
+                  type="button"
+                  className="profile-update-btn"
+                  onClick={() => {
+                    setIsEditing(true);
+                    setEditForm({ ...userInfo });
+                  }}
+                >
+                  Editar Perfil
+                </button>
+              )}
+            </div>
+          </form>
         </div>
       </div>
     </div>
